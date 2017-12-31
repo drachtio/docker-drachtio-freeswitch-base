@@ -20,7 +20,7 @@ RUN apt-get update && apt-get -y --quiet --force-yes upgrade \
     && make install \ 
     && make sounds-install moh-install \ 
     && cd /usr/local/freeswitch \
-    && rm -Rf log conf htdocs font images sounds recordings \
+    && rm -Rf log conf htdocs font recordings \
     && rm -Rf /usr/local/src/freeswitch \ 
     && apt-get purge -y --quiet --force-yes  --auto-remove autoconf automake autotools-dev build-essential cpp cpp-4.9 \
     git java-common javascript-common manpages manpages-dev openjdk-7-jre-headless:amd64 curl wget \
