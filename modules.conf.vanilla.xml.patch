@@ -1,0 +1,92 @@
+--- modules.conf.xml	2019-03-07 13:38:08.736000000 +0000
++++ /tmp/modules.conf.xml.new	2019-03-08 21:09:24.188000000 +0000
+@@ -6,11 +6,13 @@
+     <load module="mod_logfile"/>
+     <!-- <load module="mod_syslog"/> -->
+ 
++    <load module="mod_audio_fork"/>
++
+     <!--<load module="mod_yaml"/>-->
+ 
+     <!-- Multi-Faceted -->
+     <!-- mod_enum is a dialplan interface, an application interface and an api command interface -->
+-    <load module="mod_enum"/>
++    <!-- <load module="mod_enum"/> -->
+ 
+     <!-- XML Interfaces -->
+     <!-- <load module="mod_xml_rpc"/> -->
+@@ -39,7 +41,7 @@
+     <!-- <load module="mod_portaudio"/> -->
+     <!-- <load module="mod_alsa"/> -->
+     <load module="mod_sofia"/>
+-    <load module="mod_loopback"/>
++    <load module="mod_loopback"/> 
+     <!-- <load module="mod_woomera"/> -->
+     <!-- <load module="mod_freetdm"/> -->
+     <!-- <load module="mod_unicall"/> -->
+@@ -47,27 +49,27 @@
+     <!-- <load module="mod_khomp"/>   -->
+     <load module="mod_rtc"/>
+     <!-- <load module="mod_rtmp"/>   -->
+-    <load module="mod_verto"/>
++    <!-- <load module="mod_verto"/> -->
+ 
+     <!-- Applications -->
+     <load module="mod_commands"/>
+     <load module="mod_conference"/>
+     <!-- <load module="mod_curl"/> -->
+-    <load module="mod_db"/>
++    <!-- <load module="mod_db"/> -->
+     <load module="mod_dptools"/>
+-    <load module="mod_expr"/>
+-    <load module="mod_fifo"/>
+-    <load module="mod_hash"/>
++    <!-- <load module="mod_expr"/> -->
++    <!-- <load module="mod_fifo"/> -->
++    <!-- <load module="mod_hash"/> -->
+     <!--<load module="mod_mongo"/> -->
+-    <load module="mod_voicemail"/>
++    <!-- <load module="mod_voicemail"/> -->
+     <!--<load module="mod_directory"/>-->
+     <!--<load module="mod_distributor"/>-->
+     <!--<load module="mod_lcr"/>-->
+     <!--<load module="mod_easyroute"/>-->
+-    <load module="mod_esf"/>
++    <!-- <load module="mod_esf"/> -->
+     <load module="mod_fsv"/>
+     <!--<load module="mod_cluechoo"/>-->
+-    <load module="mod_valet_parking"/>
++    <!-- <load module="mod_valet_parking"/> -->
+     <!--<load module="mod_fsk"/>-->
+     <!--<load module="mod_spy"/>-->
+     <!--<load module="mod_sms"/>-->
+@@ -86,16 +88,16 @@
+     <!-- Dialplan Interfaces -->
+     <!-- <load module="mod_dialplan_directory"/> -->
+     <load module="mod_dialplan_xml"/>
+-    <load module="mod_dialplan_asterisk"/>
++    <!-- <load module="mod_dialplan_asterisk"/> -->
+ 
+     <!-- Codec Interfaces -->
+     <load module="mod_spandsp"/>
+     <load module="mod_g723_1"/>
+     <load module="mod_g729"/>
+-    <load module="mod_amr"/>
++    <!-- <load module="mod_amr"/> -->
+     <!--<load module="mod_ilbc"/>-->
+-    <!--<load module="mod_h26x"/>-->
+-    <load module="mod_b64"/>
++    <load module="mod_h26x"/>
++    <!-- <load module="mod_b64"/> -->
+     <!--<load module="mod_siren"/>-->
+     <!--<load module="mod_isac"/>-->
+     <load module="mod_opus"/>
+@@ -121,7 +123,7 @@
+     <!-- <load module="mod_perl"/> -->
+     <!-- <load module="mod_python"/> -->
+     <!-- <load module="mod_java"/> -->
+-    <load module="mod_lua"/>
++    <!-- <load module="mod_lua"/> -->
+ 
+     <!-- ASR /TTS -->
+     <!-- <load module="mod_flite"/> -->
