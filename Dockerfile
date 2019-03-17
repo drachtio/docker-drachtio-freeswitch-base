@@ -25,6 +25,7 @@ RUN apt-get update && apt-get -y --quiet --force-yes upgrade \
     && patch < /modules.conf.vanilla.xml.patch \
     && cp modules.conf.xml /  \
     && cd /usr/local/src/freeswitch \
+    && rm /Makefile.am.patch \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
@@ -70,6 +71,3 @@ RUN groupadd -r freeswitch && useradd -r -g freeswitch freeswitch
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles
-
-RUN chown -R freeswitch:freeswitch /usr/local/freeswitch
-
