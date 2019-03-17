@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:jessie-slim
 
 # comment out unecessary modules
 COPY ./*.patch /
