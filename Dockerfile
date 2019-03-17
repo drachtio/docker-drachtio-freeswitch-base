@@ -30,7 +30,7 @@ RUN apt-get update && apt-get -y --quiet --force-yes upgrade \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
     && cd /usr/local/freeswitch \
-    && rm -Rf log conf htdocs font images sounds recordings \
+    && rm -Rf log conf htdocs fonts images sounds recordings \
     && apt-get purge -y --quiet --force-yes  --auto-remove autoconf automake autotools-dev build-essential cmake cpp cpp-4.9 \
     git java-common javascript-common manpages manpages-dev openjdk-7-jre-headless:amd64 curl wget \
     freeswitch-mod-callcenter \
