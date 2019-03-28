@@ -1,33 +1,24 @@
-FROM debian:jessie-slim
+FROM debian:stretch
 
 # comment out unecessary modules
 COPY ./*.patch /
 
 RUN apt-get update && apt-get -y --quiet --force-yes upgrade \
-    && apt-get install -y --quiet --no-install-recommends wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config zlib1g-dev libjpeg-dev sqlite3 libsqlite3-dev libcurl4-gnutls-dev libpcre3-dev libspeex-dev libspeexdsp-dev libedit-dev libssl-dev yasm libopus-dev libsndfile-dev ca-certificates \
+    && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates \
     && apt-get update \
-    && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/debian/freeswitch_archive_g0.pub | apt-key add - \
-    && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/freeswitch.list \
+    && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc | apt-key add - \
+    && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" > /etc/apt/sources.list.d/freeswitch.list \
+    && echo "deb-src http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" >> /etc/apt/sources.list.d/freeswitch.list \
     && apt-get update \
-    && apt-get install -y --force-yes --no-install-recommends freeswitch-all \
+    && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
-    && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.6 freeswitch \
+    && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8 freeswitch \
     && cd freeswitch/libs \
     && git clone https://github.com/warmcat/libwebsockets.git  -b v3.1.0 \
     && cd libwebsockets && mkdir build && cd build && cmake .. && make && make install \
     && cd /usr/local/src/freeswitch \
-    && patch < /configure.ac.patch \
-    && patch < /Makefile.am.patch \
-    && cd build && patch < /modules.conf.in.patch \
-    && cp modules.conf.in /  \
-    && cd ../conf/vanilla/autoload_configs \
-    && patch < /modules.conf.vanilla.xml.patch \
-    && cp modules.conf.xml /  \
-    && cd /usr/local/src/freeswitch \
-    && rm /Makefile.am.patch \
-    && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
-    && ./bootstrap.sh -j && ./configure --with-lws=yes \
+    && ./bootstrap.sh -j && ./configure \
     && make && make install \ 
     && cd /usr/local/freeswitch \
     && rm -Rf log conf htdocs fonts images sounds recordings \
