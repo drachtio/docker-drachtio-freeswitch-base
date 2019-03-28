@@ -4,7 +4,7 @@ FROM debian:stretch-slim
 COPY ./*.patch /
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
-    && apt-get update && apt-get -y --quiet --force-yes upgrade \
+    && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
     && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates \
     && apt-get update \
     && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc | apt-key add - \
@@ -31,12 +31,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
-    && apt-get purge -y --quiet --force-yes  --auto-remove \
+    && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   autoconf automake autotools-dev binutils build-essential bzip2 \
-  ca-certificates cmake cmake-data cpp cpp-6 curl dpkg-dev file g++ g++-6 gcc \
+  ca-certificates cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
   gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
-  libatomic1 libcc1-0 libcilkrts5 libcurl3 \
-  libcurl3-gnutls libexpat1 libgcc-6-dev \
+  libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev \
   libgdbm3 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgssapi-krb5-2 \
   libhogweed4 libicu57 libidn11 libidn2-0 libisl15 libitm1 libjsoncpp1 \
   libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libksba8 libldap-2.4-2 \
@@ -68,10 +67,10 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libcups2 libcv-dev libcvaux-dev libdatrie1 libdb-dev \
 	  libdb5.3-dev libdbus-1-3 libdc1394-22 libdc1394-22-dev libdconf1 \
 	  libdjvulibre-dev libdjvulibre-text libdjvulibre21 libdrm2 libecj-java \
-	  libecj-java-gcj libedit-dev libedit2 libegl1-mesa libelf1 libepoxy0 \
+	  libecj-java-gcj libegl1-mesa libelf1 libepoxy0 \
 	  libexif-dev libexif12 libexpat1-dev libfftw3-double3 \
 	  libfile-stripnondeterminism-perl \
-	  libfontconfig1 libfontconfig1-dev libfontenc1 libfreetype6 libfreetype6-dev \
+	  libfontconfig1 libfontconfig1-dev libfontenc1 \
 	  libgbm1 libgcj-bc libgcj-common libgcj17 libgcj17-awt libgcj17-dev libgd3 \
 	  libgdbm-dev libgdk-pixbuf2.0-0 libgdk-pixbuf2.0-common libgdk-pixbuf2.0-dev \
 	  libgif7 libgirepository-1.0-1 libgl1-mesa-glx libglapi-mesa libglib2.0-bin \
@@ -147,18 +146,20 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  openjdk-8-jdk-headless openjdk-8-jre openjdk-8-jre-headless po-debconf \
 	  portaudio19-dev python python-all python-all-dev python-dev python-minimal \
 	  python2.7 python2.7-dev python2.7-minimal python3 python3-minimal python3.5 \
-	  python3.5-minimal shared-mime-info signalwire-client-c ucf unixodbc-dev \
+	  python3.5-minimal shared-mime-info signalwire-client-c ucf \
 	  uuid-dev x11-common x11-utils x11proto-composite-dev x11proto-core-dev \
 	  x11proto-damage-dev x11proto-fixes-dev x11proto-input-dev x11proto-kb-dev \
 	  x11proto-randr-dev x11proto-render-dev x11proto-xext-dev \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
+    && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev \
     && cd /usr/local/freeswitch \
     && rm -Rf log conf htdocs fonts images sounds recordings \
     && cd /usr/local && rm -Rf src share include games etc \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
     && rm /usr/local/freeswitch/lib/libfreeswitch.a \
-    && rm -Rf /var/log/* 
+    && rm -Rf /var/log/* \
+    && rm -Rf /var/lib/apt/lists/* 
 
 ADD conf.tar.gz /usr/local/freeswitch
 
