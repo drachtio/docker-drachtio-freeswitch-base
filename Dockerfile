@@ -151,7 +151,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  x11proto-damage-dev x11proto-fixes-dev x11proto-input-dev x11proto-kb-dev \
 	  x11proto-randr-dev x11proto-render-dev x11proto-xext-dev \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
-    && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev \
+    && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 \
     && cd /usr/local/freeswitch \
     && rm -Rf log conf htdocs fonts images sounds recordings \
     && cd /usr/local && rm -Rf src share include games etc \
