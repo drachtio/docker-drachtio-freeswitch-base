@@ -1,5 +1,5 @@
---- configure.ac	2019-03-06 16:24:38.720000000 +0000
-+++ configure.ac.new	2019-03-06 18:29:21.232000000 +0000
+--- configure.ac	2019-03-28 14:22:37.711290712 +0000
++++ configure.ac.new	2019-03-28 14:47:51.023301538 +0000
 @@ -13,7 +13,7 @@
  AC_CONFIG_FILES([src/include/switch_version.h.in:src/include/switch_version.h.template])
  
@@ -9,7 +9,7 @@
  m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
  AC_CONFIG_SRCDIR([src/switch.c])
  AC_CONFIG_HEADER([src/include/switch_private.h])
-@@ -1475,6 +1475,20 @@
+@@ -1547,6 +1547,20 @@
        AC_MSG_ERROR([You need to either install libedit-dev (>= 2.11) or configure with --disable-core-libedit-support])
        ])])])
  
@@ -30,7 +30,7 @@
  dnl ---------------------------------------------------------------------------
  dnl - OpenLDAP SDK
  dnl ---------------------------------------------------------------------------
-@@ -1756,6 +1770,7 @@
+@@ -1819,6 +1833,7 @@
  		src/Makefile
  		src/mod/Makefile
  		src/mod/applications/mod_abstraction/Makefile
