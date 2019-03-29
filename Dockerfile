@@ -33,7 +33,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && make && make install \ 
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   autoconf automake autotools-dev binutils build-essential bzip2 \
-  ca-certificates cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
+  cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
   gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
   libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev \
   libgdbm3 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgssapi-krb5-2 \
