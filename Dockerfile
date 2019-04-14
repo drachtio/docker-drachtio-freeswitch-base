@@ -1,6 +1,5 @@
 FROM debian:stretch-slim
 
-# comment out unecessary modules
 COPY ./*.patch /
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
@@ -32,19 +31,19 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
-  autoconf automake autotools-dev binutils build-essential bzip2 \
-  cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
-  gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
-  libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev \
-  libgdbm3 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgssapi-krb5-2 \
-  libhogweed4 libicu57 libidn11 libidn2-0 libisl15 libitm1 libjsoncpp1 \
-  libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libksba8 libldap-2.4-2 \
-  libldap-common liblsan0 liblzo2-2 libmagic-mgc libmagic1 libmpc3 libmpfr4 \
-  libmpx2 libnettle6 libnpth0 libp11-kit0 \
-  libperl5.24 libprocps6 libpsl5 libquadmath0 libreadline7 librtmp1 libsasl2-2 \
-  libsasl2-modules-db libsigsegv2 libssh2-1 \
-  libstdc++-6-dev libtasn1-6 libtool libtool-bin libtsan0 libubsan0 \
-  libunistring0 libuv1 libxml2 linux-libc-dev m4 make patch perl	\
+  	autoconf automake autotools-dev binutils build-essential bzip2 \
+  	cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
+  	gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
+  	libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev \
+  	libgdbm3 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgssapi-krb5-2 \
+  	libhogweed4 libicu57 libidn11 libidn2-0 libisl15 libitm1 libjsoncpp1 \
+  	libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libksba8 libldap-2.4-2 \
+  	libldap-common liblsan0 liblzo2-2 libmagic-mgc libmagic1 libmpc3 libmpfr4 \
+  	libmpx2 libnettle6 libnpth0 libp11-kit0 \
+  	libperl5.24 libprocps6 libpsl5 libquadmath0 libreadline7 librtmp1 libsasl2-2 \
+  	libsasl2-modules-db libsigsegv2 libssh2-1 \
+  	libstdc++-6-dev libtasn1-6 libtool libtool-bin libtsan0 libubsan0 \
+  	libunistring0 libuv1 libxml2 linux-libc-dev m4 make patch perl	\
 	  adwaita-icon-theme autopoint bison bsdmainutils ca-certificates-java \
 	  dconf-gsettings-backend dconf-service debhelper default-jdk \
 	  default-jdk-headless default-jre default-jre-headless dh-autoreconf \
