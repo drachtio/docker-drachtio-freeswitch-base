@@ -10,13 +10,13 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" > /etc/apt/sources.list.d/freeswitch.list \
     && echo "deb-src http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" >> /etc/apt/sources.list.d/freeswitch.list \
     && apt-get update \
-    && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
+    && apt-get -y --quiet --no-install-recommends build-dep freeswitch libsndfile1 \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
     && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8 freeswitch \
     && cd freeswitch/libs \
     && git clone https://github.com/warmcat/libwebsockets.git  -b v3.1.0 \
-    && cd libwebsockets && mkdir build && cd build && cmake .. && make && make install \
+    && cd libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
     && cd /usr/local/src/freeswitch \
     && patch < /configure.ac.patch \
     && patch < /Makefile.am.patch \
