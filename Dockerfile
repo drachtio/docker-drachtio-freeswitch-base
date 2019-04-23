@@ -4,13 +4,13 @@ COPY ./*.patch /
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
-    && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates \
+    && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates libsndfile1-dev \
     && apt-get update \
     && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc | apt-key add - \
     && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" > /etc/apt/sources.list.d/freeswitch.list \
     && echo "deb-src http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" >> /etc/apt/sources.list.d/freeswitch.list \
     && apt-get update \
-    && apt-get -y --quiet --no-install-recommends build-dep freeswitch libsndfile1 \
+    && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
     && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8 freeswitch \
