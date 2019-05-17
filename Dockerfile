@@ -19,16 +19,34 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
     && cd /usr/local/src/freeswitch \
     && patch < /configure.ac.patch \
+    && patch < /configure.ac.grpc.patch \
     && patch < /Makefile.am.patch \
-    && cd build && patch < /modules.conf.in.patch \
-    && cp modules.conf.in /  \
+    && patch < /Makefile.am.grpc.patch \
+    && cd build \
+		&& patch < /modules.conf.in.patch \
+		&& patch < /modules.conf.in.grpc.patch \
     && cd ../conf/vanilla/autoload_configs \
     && patch < /modules.conf.vanilla.xml.patch \
-    && cp modules.conf.xml /  \
+    && patch < /modules.conf.vanilla.xml.grpc.patch \
+    && rm /*.patch \
+		&& cd /usr/local/src \
+		&& git clone https://github.com/grpc/grpc -b v1.20.0 \
+		&& cd grpc \
+		&& git submodule update --init --recursive \
+		&& cd third_party/protobuf \
+		&& ./autogen.sh && ./configure && make install \
+		&& cd /usr/local/src/grpc \
+		&& export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH && make && make install \
+		&& cd /usr/local/src/freeswitch/libs \
+		&& git clone https://github.com/googleapis/googleapis \
+		&& cd googleapis \
+		&& LANGUAGE=cpp make \
     && cd /usr/local/src/freeswitch \
-    && rm /Makefile.am.patch \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
-    && ./bootstrap.sh -j && ./configure --with-lws=yes \
+    && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
+    && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/mod_google_tts \
+    && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/mod_dialogflow \
+    && ./bootstrap.sh -j && ./configure --with-lws=yes --with-grpc=yes \
     && make && make install \ 
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   	autoconf automake autotools-dev binutils build-essential bzip2 \
@@ -160,11 +178,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && rm -Rf /var/log/* \
     && rm -Rf /var/lib/apt/lists/* 
 
-ADD conf.tar.gz /usr/local/freeswitch
+#ADD conf.tar.gz /usr/local/freeswitch
 
-RUN cp /modules.conf.xml /usr/local/freeswitch/conf/autoload_configs
+#RUN cp /modules.conf.xml /usr/local/freeswitch/conf/autoload_configs
 
-RUN groupadd -r freeswitch && useradd -r -g freeswitch freeswitch 
+#RUN groupadd -r freeswitch && useradd -r -g freeswitch freeswitch 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles

@@ -1,0 +1,11 @@
+--- modules.conf.in	2019-05-15 14:49:30.208044539 +0000
++++ modules.conf.in.new	2019-05-15 17:42:43.423520849 +0000
+@@ -1,5 +1,8 @@
+ #applications/mod_abstraction
+ applications/mod_audio_fork
++applications/mod_google_tts
++applications/mod_google_transcribe
++applications/mod_dialogflow
+ #applications/mod_av
+ #applications/mod_avmd
+ #applications/mod_bert

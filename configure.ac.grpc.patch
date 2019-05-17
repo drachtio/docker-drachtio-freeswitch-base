@@ -1,0 +1,34 @@
+--- configure.ac	2019-05-15 17:53:25.057287346 +0000
++++ configure.ac.new	2019-05-15 17:52:12.793095323 +0000
+@@ -1561,6 +1561,21 @@
+   AM_CONDITIONAL([HAVE_LWS],[false])
+ fi
+ 
++dnl DH: Added for including google protobuf libs
++AC_ARG_WITH(grpc,
++  [AS_HELP_STRING([--with-grpc],
++    [enable support for google rpc (libgrpc++ and libgrpc)])],
++  [with_grpc="$withval"],
++  [with_grpc="no"])
++if test "$with_grpc" = "yes"; then
++  PKG_CHECK_MODULES([GRPC], [grpc++ grpc], [
++    AM_CONDITIONAL([HAVE_GRPC],[true])], [
++    AC_MSG_RESULT([no]); AM_CONDITIONAL([HAVE_GRPC],[false])])
++else
++    AM_CONDITIONAL([HAVE_GRPC],[false])
++fi
++
++
+ dnl ---------------------------------------------------------------------------
+ dnl - OpenLDAP SDK
+ dnl ---------------------------------------------------------------------------
+@@ -1834,6 +1849,9 @@
+ 		src/mod/Makefile
+ 		src/mod/applications/mod_abstraction/Makefile
+ 		src/mod/applications/mod_audio_fork/Makefile
++		src/mod/applications/mod_google_tts/Makefile
++		src/mod/applications/mod_google_transcribe/Makefile
++		src/mod/applications/mod_dialogflow/Makefile
+ 		src/mod/applications/mod_avmd/Makefile
+ 		src/mod/applications/mod_bert/Makefile
+ 		src/mod/applications/mod_blacklist/Makefile
