@@ -1,5 +1,5 @@
---- modules.conf.in	2019-03-07 14:16:30.884000000 +0000
-+++ /tmp/modules.conf.in.new	2019-03-11 14:14:58.872000000 +0000
+--- modules.conf.in	2019-03-28 14:22:37.647293730 +0000
++++ modules.conf.in.new	2019-03-28 14:52:52.061837658 +0000
 @@ -1,4 +1,5 @@
  #applications/mod_abstraction
 +applications/mod_audio_fork
@@ -33,39 +33,40 @@
  #applications/mod_hiredis
  applications/mod_httapi
  #applications/mod_http_cache
-@@ -39,7 +40,7 @@
+@@ -39,8 +40,8 @@
  #applications/mod_rad_auth
  #applications/mod_redis
  #applications/mod_rss
+-applications/mod_signalwire
 -applications/mod_sms
++#applications/mod_signalwire
 +#applications/mod_sms
  #applications/mod_sms_flowroute
  #applications/mod_snapshot
  #applications/mod_snom
-@@ -49,18 +50,18 @@
+@@ -50,10 +51,10 @@
  #applications/mod_spy
  #applications/mod_stress
  #applications/mod_translate
 -applications/mod_valet_parking
 +#applications/mod_valet_parking
+ #applications/mod_video_filter
  #applications/mod_vmd
 -applications/mod_voicemail
 +#applications/mod_voicemail
  #applications/mod_voicemail_ivr
  #asr_tts/mod_cepstral
  #asr_tts/mod_flite
- #asr_tts/mod_pocketsphinx
- #asr_tts/mod_tts_commandline
+@@ -62,7 +63,7 @@
  #asr_tts/mod_unimrcp
--codecs/mod_amr
-+#codecs/mod_amr
+ codecs/mod_amr
  #codecs/mod_amrwb
 -codecs/mod_b64
 +#codecs/mod_b64
  #codecs/mod_bv
  #codecs/mod_clearmode
  #codecs/mod_codec2
-@@ -77,7 +78,7 @@
+@@ -79,7 +80,7 @@
  #codecs/mod_silk
  #codecs/mod_siren
  #codecs/mod_theora
@@ -74,7 +75,7 @@
  #dialplans/mod_dialplan_directory
  dialplans/mod_dialplan_xml
  #directories/mod_ldap
-@@ -86,20 +87,20 @@
+@@ -88,19 +89,19 @@
  #endpoints/mod_gsmopen
  #endpoints/mod_h323
  #endpoints/mod_khomp
@@ -82,12 +83,10 @@
 +#endpoints/mod_loopback
  #endpoints/mod_opal
  #endpoints/mod_portaudio
--endpoints/mod_rtc
-+#endpoints/mod_rtc
+ endpoints/mod_rtc
  #endpoints/mod_rtmp
 -endpoints/mod_skinny
 +#endpoints/mod_skinny
- #endpoints/mod_skypopen
  endpoints/mod_sofia
 -endpoints/mod_verto
 +#endpoints/mod_verto
@@ -100,7 +99,7 @@
  #event_handlers/mod_erlang_event
  #event_handlers/mod_event_multicast
  event_handlers/mod_event_socket
-@@ -115,7 +116,7 @@
+@@ -117,7 +118,7 @@
  #formats/mod_imagick
  formats/mod_local_stream
  formats/mod_native_file
@@ -109,7 +108,7 @@
  #formats/mod_portaudio_stream
  #formats/mod_shell_stream
  #formats/mod_shout
-@@ -125,7 +126,7 @@
+@@ -127,7 +128,7 @@
  #formats/mod_vlc
  #languages/mod_basic
  #languages/mod_java
@@ -118,16 +117,21 @@
  #languages/mod_managed
  #languages/mod_perl
  #languages/mod_python
-@@ -134,7 +135,7 @@
+@@ -136,7 +137,7 @@
  loggers/mod_console
  #loggers/mod_graylog2
  loggers/mod_logfile
 -loggers/mod_syslog
 +#loggers/mod_syslog
+ #loggers/mod_raven
  #say/mod_say_de
  say/mod_say_en
- #say/mod_say_es
-@@ -159,8 +160,8 @@
+@@ -158,12 +159,12 @@
+ #say/mod_say_zh
+ #timers/mod_posix_timer
+ #timers/mod_timerfd
+-xml_int/mod_xml_cdr
++#xml_int/mod_xml_cdr
  #xml_int/mod_xml_curl
  #xml_int/mod_xml_ldap
  #xml_int/mod_xml_radius
