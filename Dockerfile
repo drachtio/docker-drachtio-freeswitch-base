@@ -152,19 +152,13 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
     && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libsndfile1 \
     && cd /usr/local/freeswitch \
-    && rm -Rf log conf htdocs fonts images sounds recordings \
+    && rm -Rf conf/diaplans/* conf/sip_profiles/* htdocs fonts images \
     && cd /usr/local && rm -Rf src share include games etc \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
     && rm /usr/local/freeswitch/lib/libfreeswitch.a \
     && rm -Rf /var/log/* \
     && rm -Rf /var/lib/apt/lists/* 
-
-ADD conf.tar.gz /usr/local/freeswitch
-
-RUN cp /modules.conf.xml /usr/local/freeswitch/conf/autoload_configs
-
-RUN groupadd -r freeswitch && useradd -r -g freeswitch freeswitch 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles
