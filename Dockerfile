@@ -47,8 +47,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/mod_google_tts \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/mod_dialogflow \
     && ./bootstrap.sh -j && ./configure --with-lws=yes --with-grpc=yes \
-    && make && make install \ 
-    && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
+    && make && make install \
+	  && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   	autoconf automake autotools-dev binutils build-essential bzip2 \
   	cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
   	gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
@@ -170,19 +170,15 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
     && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libsndfile1 \
     && cd /usr/local/freeswitch \
-    && rm -Rf log conf htdocs fonts images sounds recordings \
+    && rm -Rf htdocs fonts images \
     && cd /usr/local && rm -Rf src share include games etc \
+    && rm -Rf /usr/local/freeswitch/conf/dialplan/* \
+    && rm -Rf /usr/local/freeswitch/conf/sip_profiles/* \
     && cd /usr && rm -Rf games include \
-    && cd /usr/share && rm -Rf freeswitch man \
+    && cd /usr/share && rm -Rf freeswitch man \ 
     && rm /usr/local/freeswitch/lib/libfreeswitch.a \
     && rm -Rf /var/log/* \
     && rm -Rf /var/lib/apt/lists/* 
-
-#ADD conf.tar.gz /usr/local/freeswitch
-
-#RUN cp /modules.conf.xml /usr/local/freeswitch/conf/autoload_configs
-
-#RUN groupadd -r freeswitch && useradd -r -g freeswitch freeswitch 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles
