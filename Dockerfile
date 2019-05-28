@@ -1,6 +1,7 @@
 FROM debian:stretch-slim
 
 COPY ./*.patch /
+COPY ./vars_diff.xml /
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
@@ -30,6 +31,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
+		&& cp /vars_diff.xml /usr/local/freeswitch/conf \
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   	autoconf automake autotools-dev binutils build-essential bzip2 \
   	cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
