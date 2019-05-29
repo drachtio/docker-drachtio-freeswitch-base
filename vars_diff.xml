@@ -1,0 +1,15 @@
+<include>
+
+  <X-PRE-PROCESS cmd="set" data="esl_password=ClueCon"/>
+
+  <X-PRE-PROCESS cmd="set" data="sip_port=5080"/>
+  <X-PRE-PROCESS cmd="set" data="tls_port=5081"/>
+
+  <X-PRE-PROCESS cmd="set" data="event_socket_port=8021"/>
+  <X-PRE-PROCESS cmd="set" data="rtp_range_start=16384"/>
+  <X-PRE-PROCESS cmd="set" data="rtp_range_end=32768"/>
+
+  <X-PRE-PROCESS cmd="set" data="my_local_ip4=$${local_ip_v4}"/>
+  <X-PRE-PROCESS cmd="set" data="ext_rtp_ip=$${local_ip_v4}"/>
+
+</include>
