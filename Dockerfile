@@ -13,8 +13,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update \
     && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
     && cd /usr/local/src \
-    && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
-    && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8 freeswitch \
+    && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git -b v0.2.1 \
+    && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8.5 freeswitch \
     && cd freeswitch/libs \
     && git clone https://github.com/warmcat/libwebsockets.git  -b v3.1.0 \
     && cd libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
