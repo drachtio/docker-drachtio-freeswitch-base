@@ -5,16 +5,18 @@ COPY ./vars_diff.xml /
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
-    && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates  \
+    && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git lsb-release cmake automake autoconf libtool libtool-bin \
+		build-essential pkg-config ca-certificates  libswscale-dev libldns-dev libmp3lame-dev \
     && apt-get update \
-    && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc | apt-key add - \
-    && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" > /etc/apt/sources.list.d/freeswitch.list \
-    && echo "deb-src http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" >> /etc/apt/sources.list.d/freeswitch.list \
+    && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/debian-unstable/freeswitch_archive_g0.pub | apt-key add - \
+    && echo "deb http://files.freeswitch.org/repo/deb/debian-unstable/ `lsb_release -sc` main" > /etc/apt/sources.list.d/freeswitch.list \
+    && echo "deb-src http://files.freeswitch.org/repo/deb/debian-unstable/ `lsb_release -sc` main" >> /etc/apt/sources.list.d/freeswitch.list \
     && apt-get update \
     && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
     && cd /usr/local/src \
+    && git clone https://github.com/dpirch/libfvad.git \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git -b v0.2.2 \
-    && git clone https://freeswitch.org/stash/scm/fs/freeswitch.git -bv1.8.5 freeswitch \
+    && git clone https://github.com/davehorton/freeswitch.git -bv1.10.1 freeswitch \
     && cd freeswitch/libs \
     && git clone https://github.com/warmcat/libwebsockets.git  -b v3.2.0 \
     && cd libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
@@ -32,7 +34,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
 		&& cp /vars_diff.xml /usr/local/freeswitch/conf \
-    && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
+    && apt-get purge -y --quiet --allow-remove-essential  --auto-remove --ignore-missing \
   	autoconf automake autotools-dev binutils build-essential bzip2 \
   	cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
   	gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \

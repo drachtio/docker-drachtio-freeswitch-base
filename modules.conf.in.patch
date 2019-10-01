@@ -1,11 +1,13 @@
---- modules.conf.in	2019-03-28 14:22:37.647293730 +0000
-+++ modules.conf.in.new	2019-03-28 14:52:52.061837658 +0000
-@@ -1,4 +1,5 @@
- #applications/mod_abstraction
+--- modules.conf.in	2019-09-25 08:55:34.000000000 -0400
++++ modules.conf.in.new	2019-09-30 22:01:51.000000000 -0400
+@@ -1,5 +1,6 @@
 +applications/mod_audio_fork
- #applications/mod_av
+ #applications/mod_abstraction
+-applications/mod_av
++#applications/mod_av
  #applications/mod_avmd
  #applications/mod_bert
+ #applications/mod_blacklist
 @@ -10,19 +11,19 @@
  applications/mod_conference
  #applications/mod_curl
@@ -66,16 +68,18 @@
  #codecs/mod_bv
  #codecs/mod_clearmode
  #codecs/mod_codec2
-@@ -79,7 +80,7 @@
- #codecs/mod_silk
+@@ -80,8 +81,8 @@
  #codecs/mod_siren
  #codecs/mod_theora
+ #databases/mod_mariadb
+-databases/mod_pgsql
 -dialplans/mod_dialplan_asterisk
++#databases/mod_pgsql
 +#dialplans/mod_dialplan_asterisk
  #dialplans/mod_dialplan_directory
  dialplans/mod_dialplan_xml
  #directories/mod_ldap
-@@ -88,19 +89,19 @@
+@@ -90,19 +91,19 @@
  #endpoints/mod_gsmopen
  #endpoints/mod_h323
  #endpoints/mod_khomp
@@ -99,7 +103,7 @@
  #event_handlers/mod_erlang_event
  #event_handlers/mod_event_multicast
  event_handlers/mod_event_socket
-@@ -117,7 +118,7 @@
+@@ -119,7 +120,7 @@
  #formats/mod_imagick
  formats/mod_local_stream
  formats/mod_native_file
@@ -108,8 +112,8 @@
  #formats/mod_portaudio_stream
  #formats/mod_shell_stream
  #formats/mod_shout
-@@ -127,7 +128,7 @@
- #formats/mod_vlc
+@@ -130,7 +131,7 @@
+ #formats/mod_opusfile
  #languages/mod_basic
  #languages/mod_java
 -languages/mod_lua
@@ -117,21 +121,7 @@
  #languages/mod_managed
  #languages/mod_perl
  #languages/mod_python
-@@ -136,7 +137,7 @@
- loggers/mod_console
- #loggers/mod_graylog2
- loggers/mod_logfile
--loggers/mod_syslog
-+#loggers/mod_syslog
- #loggers/mod_raven
- #say/mod_say_de
- say/mod_say_en
-@@ -158,12 +159,12 @@
- #say/mod_say_zh
- #timers/mod_posix_timer
- #timers/mod_timerfd
--xml_int/mod_xml_cdr
-+#xml_int/mod_xml_cdr
+@@ -165,8 +166,8 @@
  #xml_int/mod_xml_curl
  #xml_int/mod_xml_ldap
  #xml_int/mod_xml_radius
