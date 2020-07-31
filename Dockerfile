@@ -152,6 +152,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  x11proto-damage-dev x11proto-fixes-dev x11proto-input-dev x11proto-kb-dev \
 	  x11proto-randr-dev x11proto-render-dev x11proto-xext-dev \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
+          libavcodec-dev libavutil-dev libavformat-dev libav-tools libavresample-dev libswscale-dev \
     && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libsndfile1 \
     && cd /usr/local/freeswitch \
     && rm -Rf conf/diaplans/* conf/sip_profiles/* htdocs fonts images \
