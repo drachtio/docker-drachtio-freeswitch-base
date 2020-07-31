@@ -164,3 +164,4 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles
+ONBUILD ADD autoload_configs /usr/local/freeswitch/conf/autoload_configs

@@ -1,11 +1,13 @@
---- modules.conf.in	2019-03-28 14:22:37.647293730 +0000
-+++ modules.conf.in.new	2019-03-28 14:52:52.061837658 +0000
-@@ -1,4 +1,5 @@
+--- modules.conf.in	2020-07-31 12:17:30.590871024 +0000
++++ modules.conf.in.new	2020-07-31 13:03:47.510778670 +0000
+@@ -1,5 +1,6 @@
  #applications/mod_abstraction
+-#applications/mod_av
 +applications/mod_audio_fork
- #applications/mod_av
++applications/mod_av
  #applications/mod_avmd
  #applications/mod_bert
+ #applications/mod_blacklist
 @@ -10,19 +11,19 @@
  applications/mod_conference
  #applications/mod_curl
@@ -99,25 +101,7 @@
  #event_handlers/mod_erlang_event
  #event_handlers/mod_event_multicast
  event_handlers/mod_event_socket
-@@ -117,7 +118,7 @@
- #formats/mod_imagick
- formats/mod_local_stream
- formats/mod_native_file
--formats/mod_png
-+#formats/mod_png
- #formats/mod_portaudio_stream
- #formats/mod_shell_stream
- #formats/mod_shout
-@@ -127,7 +128,7 @@
- #formats/mod_vlc
- #languages/mod_basic
- #languages/mod_java
--languages/mod_lua
-+#languages/mod_lua
- #languages/mod_managed
- #languages/mod_perl
- #languages/mod_python
-@@ -136,7 +137,7 @@
+@@ -137,7 +138,7 @@
  loggers/mod_console
  #loggers/mod_graylog2
  loggers/mod_logfile
@@ -126,7 +110,7 @@
  #loggers/mod_raven
  #say/mod_say_de
  say/mod_say_en
-@@ -158,12 +159,12 @@
+@@ -159,12 +160,12 @@
  #say/mod_say_zh
  #timers/mod_posix_timer
  #timers/mod_timerfd
