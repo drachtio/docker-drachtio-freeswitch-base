@@ -1,42 +1,41 @@
 FROM debian:stretch-slim
 
-COPY ./*.patch /
-COPY ./vars_diff.xml /
+COPY ./files/* /tmp/
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
     && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates  \
+		libavformat-dev liblua5.1-0 liblua5.1-0-dev libssl-dev libz-dev libjpeg-dev sqlite3 libsqlite3-dev libcurl4-openssl-dev libpcre3-dev libswscale-dev \
+    libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm haveged libldns-dev unixodbc \
+    libopus-dev libopusfile-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libedit2 libfreetype6 libsndfile1 \
     && apt-get update \
-    && wget  --no-check-certificate  -O - https://files.freeswitch.org/repo/deb/freeswitch-1.8/fsstretch-archive-keyring.asc | apt-key add - \
-    && echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" > /etc/apt/sources.list.d/freeswitch.list \
-    && echo "deb-src http://files.freeswitch.org/repo/deb/freeswitch-1.8/ stretch main" >> /etc/apt/sources.list.d/freeswitch.list \
-    && apt-get update \
-    && apt-get -y --quiet --no-install-recommends build-dep freeswitch \
     && cd /usr/local/src \
+    && git clone https://github.com/davehorton/freeswitch.git -b v1.10.1 \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git -b v0.2.4 \
-    && git clone https://github.com/signalwire/freeswitch.git -bv1.8.5 freeswitch \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/ \
     && cd freeswitch/libs \
-    && git clone https://github.com/warmcat/libwebsockets.git  -b v3.2.0 \
-    && cd libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
-    && cd /usr/local/src/freeswitch \
-    && patch < /configure.ac.patch \
-    && patch < /Makefile.am.patch \
-    && cd build && patch < /modules.conf.in.patch \
-    && cp modules.conf.in /  \
-    && cd ../conf/vanilla/autoload_configs \
-    && patch < /modules.conf.vanilla.xml.patch \
-    && cp modules.conf.xml /  \
-    && cd /usr/local/src/freeswitch \
-    && rm /Makefile.am.patch \
+    && git clone https://github.com/dpirch/libfvad.git \
+    && git clone https://github.com/warmcat/libwebsockets.git  -b v3.2-stable \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
+    && cd /usr/local/src/freeswitch \
+		&& cp /tmp/configure.ac .  \
+		&& cp /tmp/Makefile.am .  \
+		&& cp /tmp/modules.conf.in ./build  \
+		&& cp /tmp/modules.conf.vanilla.xml ./conf/vanilla/autoload_configs \
+		&& cd src/mod/formats/mod_opusfile \
+		&& cp /tmp/mod_opusfile.c.patch . \
+		&& patch < mod_opusfile.c.patch \
+    && cd /usr/local/src/freeswitch/libs/libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
+    && cd /usr/local/src/freeswitch/libs/libfvad && autoreconf -i && ./configure && make && make install\
+		&& cd /usr/local/src/freeswitch \
     && ./bootstrap.sh -j && ./configure --with-lws=yes \
     && make && make install \ 
-		&& cp /vars_diff.xml /usr/local/freeswitch/conf \
+		&& cp /tmp/vars_diff.xml /usr/local/freeswitch/conf \
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \
   	autoconf automake autotools-dev binutils build-essential bzip2 \
   	cmake cmake-data cpp cpp-6 dpkg-dev file g++ g++-6 gcc \
   	gcc-6 git git-man gnupg gnupg-agent gnupg2 libarchive13 libasan3 libassuan0 \
-  	libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev \
+  	libatomic1 libcc1-0 libcilkrts5 libexpat1 libgcc-6-dev libavformat-dev \
   	libgdbm3 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgssapi-krb5-2 \
   	libhogweed4 libicu57 libidn11 libidn2-0 libisl15 libitm1 libjsoncpp1 \
   	libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 libksba8 libldap-2.4-2 \
@@ -83,9 +82,9 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libice-dev libice6 libicu-dev libilmbase-dev libilmbase12 libjack-dev \
 	  libjack0 libjbig-dev libjbig0 libjpeg-dev libjpeg62-turbo \
 	  libjpeg62-turbo-dev libjs-jquery libjson-glib-1.0-0 libjson-glib-1.0-common \
-	  libks liblcms2-2 liblcms2-dev libldap2-dev libldns-fs-dev libldns2-fs \
-	  libllvm3.9 liblqr-1-0 liblqr-1-0-dev libltdl-dev libltdl7 liblua5.2-0 \
-	  liblua5.2-dev liblzma-dev libmagickcore-6-arch-config \
+	  liblcms2-2 liblcms2-dev libldap2-dev \
+	  libllvm3.9 liblqr-1-0 liblqr-1-0-dev libltdl-dev libltdl7 liblua5.1-0 \
+	  liblua5.1-dev liblzma-dev libmagickcore-6-arch-config \
 	  libmagickcore-6-headers libmagickcore-6.q16-3 libmagickcore-6.q16-3-extra \
 	  libmagickcore-6.q16-dev libmagickcore-dev libmagickwand-6.q16-3 \
 	  libmemcached-dev libmemcached11 libmemcachedutil2 libmono-2.0-dev \
@@ -93,14 +92,14 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libmono-posix4.0-cil libmono-security4.0-cil \
 	  libmono-system-configuration4.0-cil libmono-system-core4.0-cil \
 	  libmono-system-security4.0-cil libmono-system-xml4.0-cil \
-	  libmono-system4.0-cil libmonosgen-2.0-1 libmonosgen-2.0-dev libmp3lame-dev \
-	  libmp3lame0 libmpdec2 libmpg123-0 libmpg123-dev libnspr4 \
+	  libmono-system4.0-cil libmonosgen-2.0-1 libmonosgen-2.0-dev \
+	  libmp3lame0 libmpdec2 libmpg123-0 libnspr4 \
 	  libnss3 libnuma1 libopencv-calib3d-dev libopencv-calib3d2.4v5 \
 	  libopencv-contrib-dev libopencv-contrib2.4v5 libopencv-core-dev \
 	  libopencv-core2.4v5 libopencv-dev libopencv-features2d-dev \
 	  libopencv-features2d2.4v5 libopencv-flann-dev libopencv-flann2.4v5 \
 	  libopencv-gpu-dev libopencv-gpu2.4v5 libopencv-highgui-dev \
-	  libopencv-highgui2.4-deb0 libopencv-imgproc-dev libopencv-imgproc2.4v5 \
+	  libopencv-highgui2.4-deb0 libopencv-imgproc-dev libopencv-imgproc2.4v5 libsqlite3-dev \
 	  libopencv-legacy-dev libopencv-legacy2.4v5 libopencv-ml-dev \
 	  libopencv-ml2.4v5 libopencv-objdetect-dev libopencv-objdetect2.4v5 \
 	  libopencv-ocl-dev libopencv-ocl2.4v5 libopencv-photo-dev \
@@ -120,13 +119,13 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libpython3.5-stdlib librabbitmq-dev librabbitmq4 libraw1394-11 \
 	  libraw1394-dev libreadline-dev librest-0.7-0 librsvg2-2 librsvg2-common \
 	  librsvg2-dev libsasl2-dev libsensors4 libsensors4-dev libshine3 libshout3 \
-	  libshout3-dev libsilk-dev libsilk1 libsm-dev libsm6 libsnappy1v5 \
+	  libsm-dev libsm6 libsnappy1v5 \
 	  libsoundtouch-dev \
-	  libsoundtouch1 libsoup-gnome2.4-1 libsoup2.4-1 \
-	  libswscale-dev libswscale4 \
-	  libtbb2 libthai-data libthai0 libtheora-dev libtheora0 libtiff5 libtiff5-dev \
+	  libsoundtouch1 libsoup-gnome2.4-1 libsoup2.4-1  \
+	  libswscale-dev libswscale4 haveged \
+	  libtbb2 libthai-data libthai0 libtheora-dev libtheora0 \
 	  libtiffxx5 libtimedate-perl libtinfo-dev libtwolame0 libudev-dev \
-	  libusb-1.0-0 libv4l-0 libv4lconvert0 libv8-6.1 libv8-6.1-dev libva-drm1 \
+	  libusb-1.0-0 libv4l-0 libv4lconvert0 libva-drm1 \
 	  libva-x11-1 libva1 libvdpau1 libvlc-dev libvlc5 libvlccore9 libvorbis-dev \
 	  libvorbis0a libvorbisenc2 libvorbisfile3 libvpx4 libwavpack1 \
 	  libwayland-client0 libwayland-cursor0 libwayland-egl1-mesa \
@@ -147,12 +146,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  openjdk-8-jdk-headless openjdk-8-jre openjdk-8-jre-headless po-debconf \
 	  portaudio19-dev python python-all python-all-dev python-dev python-minimal \
 	  python2.7 python2.7-dev python2.7-minimal python3 python3-minimal python3.5 \
-	  python3.5-minimal shared-mime-info signalwire-client-c ucf \
+	  python3.5-minimal shared-mime-info ucf \
 	  uuid-dev x11-common x11-utils x11proto-composite-dev x11proto-core-dev \
 	  x11proto-damage-dev x11proto-fixes-dev x11proto-input-dev x11proto-kb-dev \
 	  x11proto-randr-dev x11proto-render-dev x11proto-xext-dev \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
-    && apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libsndfile1 \
     && cd /usr/local/freeswitch \
     && rm -Rf conf/diaplans/* conf/sip_profiles/* htdocs fonts images \
     && cd /usr/local && rm -Rf src share include games etc \
@@ -160,6 +158,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/share && rm -Rf freeswitch man \
     && rm /usr/local/freeswitch/lib/libfreeswitch.a \
     && rm -Rf /var/log/* \
+		&& rm -Rf /tmp/* \
     && rm -Rf /var/lib/apt/lists/* 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
