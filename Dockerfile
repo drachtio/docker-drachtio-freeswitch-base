@@ -99,7 +99,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libopencv-core2.4v5 libopencv-dev libopencv-features2d-dev \
 	  libopencv-features2d2.4v5 libopencv-flann-dev libopencv-flann2.4v5 \
 	  libopencv-gpu-dev libopencv-gpu2.4v5 libopencv-highgui-dev \
-	  libopencv-highgui2.4-deb0 libopencv-imgproc-dev libopencv-imgproc2.4v5 libsqlite3-dev \
+	  libopencv-highgui2.4-deb0 libopencv-imgproc-dev libopencv-imgproc2.4v5 \
 	  libopencv-legacy-dev libopencv-legacy2.4v5 libopencv-ml-dev \
 	  libopencv-ml2.4v5 libopencv-objdetect-dev libopencv-objdetect2.4v5 \
 	  libopencv-ocl-dev libopencv-ocl2.4v5 libopencv-photo-dev \
