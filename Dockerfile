@@ -11,7 +11,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/freeswitch.git -b v1.10.1 \
-    && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git -b v0.2.4 \
+    && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/ \
     && cd freeswitch/libs \
     && git clone https://github.com/dpirch/libfvad.git \
