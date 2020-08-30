@@ -7,7 +7,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get install -y --quiet --no-install-recommends gnupg2 wget curl git cmake automake autoconf libtool libtool-bin build-essential pkg-config ca-certificates  \
 		libavformat-dev liblua5.1-0 liblua5.1-0-dev libssl-dev libz-dev libjpeg-dev sqlite3 libsqlite3-dev libcurl4-openssl-dev libpcre3-dev libswscale-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm haveged libldns-dev unixodbc \
-    libopus-dev libopusfile-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libedit2 libfreetype6 libsndfile1 \
+    libopus-dev libopusfile-dev libsndfile-dev libshout3 libshout3-dev libmpg123-dev libmp3lame-dev libedit2 libfreetype6 libsndfile1 \
     && apt-get update \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/freeswitch.git -b v1.10.1 \
@@ -93,7 +93,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libmono-system-configuration4.0-cil libmono-system-core4.0-cil \
 	  libmono-system-security4.0-cil libmono-system-xml4.0-cil \
 	  libmono-system4.0-cil libmonosgen-2.0-1 libmonosgen-2.0-dev \
-	  libmp3lame0 libmpdec2 libmpg123-0 libnspr4 \
+	  libmpdec2 libmpg123-0 libnspr4 \
 	  libnss3 libnuma1 libopencv-calib3d-dev libopencv-calib3d2.4v5 \
 	  libopencv-contrib-dev libopencv-contrib2.4v5 libopencv-core-dev \
 	  libopencv-core2.4v5 libopencv-dev libopencv-features2d-dev \
@@ -151,7 +151,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  x11proto-damage-dev x11proto-fixes-dev x11proto-input-dev x11proto-kb-dev \
 	  x11proto-randr-dev x11proto-render-dev x11proto-xext-dev \
 	  x11proto-xinerama-dev xkb-data xorg-sgml-doctools xtrans-dev yasm \
-		&& apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libsndfile1 \    
+		&& apt-get install -y --quiet --no-install-recommends sqlite3 unixodbc libfreetype6 libcurl4-openssl-dev libedit2 libmp3lame-dev libmpg123-dev libshout-dev libsndfile1 \    
 		&& cd /usr/local/freeswitch \
     && rm -Rf conf/diaplans/* conf/sip_profiles/* htdocs fonts images \
     && cd /usr/local && rm -Rf src share include games etc \
