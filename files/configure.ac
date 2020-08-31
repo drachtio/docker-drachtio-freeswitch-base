@@ -1563,6 +1563,32 @@ else
   AM_CONDITIONAL([HAVE_LWS],[false])
 fi
 
+dnl DH: Added for including aws lex
+AC_ARG_WITH(lex,
+  [AS_HELP_STRING([--with-lex],
+    [enable support for AWS Lex])],
+  [with_lws="$withval"],
+  [with_lws="no"])
+if test "$with_lex" = "yes"; then
+  AM_CONDITIONAL([HAVE_LEX],[false])
+else
+  AM_CONDITIONAL([HAVE_LEX],[false])
+fi
+
+dnl DH: Added for including google protobuf libs
++AC_ARG_WITH(grpc,
+   [AS_HELP_STRING([--with-grpc],
+     [enable support for google rpc (libgrpc++ and libgrpc)])],
+   [with_grpc="$withval"],
+   [with_grpc="no"])
+if test "$with_grpc" = "yes"; then
+  PKG_CHECK_MODULES([GRPC], [grpc++ grpc], [
+    AM_CONDITIONAL([HAVE_GRPC],[true])], [
+    AC_MSG_RESULT([no]); AM_CONDITIONAL([HAVE_GRPC],[false])])
+else
+    AM_CONDITIONAL([HAVE_GRPC],[false])
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl - OpenLDAP SDK
 dnl ---------------------------------------------------------------------------
@@ -1858,6 +1884,9 @@ AC_CONFIG_FILES([Makefile
 		src/Makefile
 		src/mod/Makefile
 		src/mod/applications/mod_audio_fork/Makefile
+		src/mod/applications/mod_google_tts/Makefile
+		src/mod/applications/mod_google_transcribe/Makefile
+		src/mod/applications/mod_dialogflow/Makefile
 		src/mod/applications/mod_abstraction/Makefile
 		src/mod/applications/mod_avmd/Makefile
 		src/mod/applications/mod_bert/Makefile

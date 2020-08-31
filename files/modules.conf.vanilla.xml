@@ -1,6 +1,10 @@
 <configuration name="modules.conf" description="Modules">
   <modules>
     <load module="mod_audio_fork"/>
+    <load module="mod_google_transcribe"/>
+    <load module="mod_google_tts"/>
+    <load module="mod_dialogflow"/>
+
     <!-- Loggers (I'd load these first) -->
     <load module="mod_console"/>
     <!-- <load module="mod_graylog2"/> -->
@@ -106,7 +110,7 @@
     <!-- <load module="mod_av"/>  -->
     <load module="mod_sndfile"/>
     <load module="mod_native_file"/>
-    <load module="mod_opusfile"/>
+    <!--<load module="mod_opusfile"/>-->
     <!-- <load module="mod_png"/>  -->
     <!-- <load module="mod_shell_stream"/> -->
     <!--For icecast/mp3 streams/files-->

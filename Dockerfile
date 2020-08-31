@@ -12,8 +12,18 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/local/src \
     && git clone https://github.com/davehorton/freeswitch.git -b v1.10.1 \
     && git clone https://github.com/davehorton/drachtio-freeswitch-modules.git \
+    && git clone https://github.com/grpc/grpc -b v1.24.2 \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/ \
-    && cd freeswitch/libs \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/ \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/ \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/ \
+		&& cd /usr/local/src/grpc && git submodule update --init --recursive \
+		&& cd third_party/protobuf && ./autogen.sh && ./configure && make install \
+		&& cd /usr/local/src/grpc && export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH && make && make install \
+    && cd /usr/local/src/freeswitch/libs \
+		&& git clone https://github.com/davehorton/googleapis -b dialogflow-v2-support \
+		&& cd googleapis && LANGUAGE=cpp make \
+		&& cd /usr/local/src/freeswitch/libs \
     && git clone https://github.com/dpirch/libfvad.git \
     && git clone https://github.com/warmcat/libwebsockets.git  -b v3.2-stable \
     && cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
@@ -28,7 +38,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/local/src/freeswitch/libs/libwebsockets && mkdir -p build && cd build && cmake .. && make && make install \
     && cd /usr/local/src/freeswitch/libs/libfvad && autoreconf -i && ./configure && make && make install\
 		&& cd /usr/local/src/freeswitch \
-    && ./bootstrap.sh -j && ./configure --with-lws=yes \
+    && ./bootstrap.sh -j && ./configure --with-lws=yes --with-grpc=yes \
     && make && make install \ 
 		&& cp /tmp/vars_diff.xml /usr/local/freeswitch/conf \
     && apt-get purge -y --quiet --allow-remove-essential  --auto-remove \

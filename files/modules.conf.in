@@ -1,4 +1,8 @@
 applications/mod_audio_fork
+applications/mod_aws_lex
+applications/mod_google_tts
+applications/mod_google_transcribe
+applications/mod_dialogflow
 #applications/mod_abstraction
 #applications/mod_av
 #applications/mod_avmd
