@@ -90,7 +90,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  libgvpr2 libharfbuzz-dev libharfbuzz-gobject0 libharfbuzz-icu0 libharfbuzz0b \
 	  libhashkit-dev libhashkit2 libhighgui-dev libhiredis-dev libhiredis0.13 \
 	  libice-dev libice6 libicu-dev libilmbase-dev libilmbase12 libjack-dev \
-	  libjack0 libjbig-dev libjbig0 libjpeg-dev libjpeg62-turbo \
+	  libjack0 libjbig-dev libjpeg-dev libjpeg62-turbo \
 	  libjpeg62-turbo-dev libjs-jquery libjson-glib-1.0-0 libjson-glib-1.0-common \
 	  liblcms2-2 liblcms2-dev libldap2-dev \
 	  libllvm3.9 liblqr-1-0 liblqr-1-0-dev libltdl-dev libltdl7 liblua5.1-0 \
