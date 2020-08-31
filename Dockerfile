@@ -31,7 +31,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/configure.ac .  \
 		&& cp /tmp/Makefile.am .  \
 		&& cp /tmp/modules.conf.in ./build  \
-		&& cp /tmp/modules.conf.vanilla.xml ./conf/vanilla/autoload_configs \
+		&& cp /tmp/modules.conf.vanilla.xml ./conf/vanilla/autoload_configs/modules.conf.xml \
 		&& cd src/mod/formats/mod_opusfile \
 		&& cp /tmp/mod_opusfile.c.patch . \
 		&& patch < mod_opusfile.c.patch \
