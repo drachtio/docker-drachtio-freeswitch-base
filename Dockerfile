@@ -18,7 +18,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd SpeechSDK-Linux-1.19.0 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
-		&& ln -s /usr/local/lib/MicrosoftSpeechSDK/lib/x64/libMicrosoft.CognitiveServices.Speech.core.so /usr/local/lib/libMicrosoft.CognitiveServices.Speech.core.so \
+		&& ln -s /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.CognitiveServices.Speech.core.so /usr/local/lib/libMicrosoft.CognitiveServices.Speech.core.so \
 		&& cd /usr/local/src \
 		&& git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
