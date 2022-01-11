@@ -13,12 +13,18 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged \
 		libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev \
 		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
+		&& cd /tmp \
+		&& tar xvfz SpeechSDK-Linux-1.19.0.tar.gz \
+		&& cd SpeechSDK-Linux-1.19.0 \
+		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
+		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
+		&& ln -s /usr/local/lib/MicrosoftSpeechSDK/lib/x64/libMicrosoft.CognitiveServices.Speech.core.so /usr/local/lib/libMicrosoft.CognitiveServices.Speech.core.so \
 		&& cd /usr/local/src \
 		&& git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.5 \ 
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v3.2.3 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.4.0 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.5.1 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
     && cd  /usr/local/src/grpc \
     && git checkout c66d2cc \
@@ -34,6 +40,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git clone https://github.com/awslabs/aws-c-common.git \ 
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_aws_transcribe \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_azure_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_azure_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_lex /usr/local/src/freeswitch/src/mod/applications/mod_aws_lex \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/mod_google_tts \
@@ -93,7 +100,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
     && rm /usr/local/freeswitch/lib/libfreeswitch.a \
-		&& rm /tmp/* \
+		&& rm -Rf /tmp/* \
     && rm -Rf /var/log/* \
     && rm -Rf /var/lib/apt/lists/* 
 
