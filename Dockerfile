@@ -98,7 +98,10 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/mrf_sip_profile.xml /usr/local/freeswitch/conf/sip_profiles \
 		&& cp /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& sed -i -e 's/global_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/global_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
-		&& sed -i -e 's/outbound_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/outbound_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml 
+		&& sed -i -e 's/outbound_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/outbound_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
+	  && cd /usr/local && rm -Rf src share include games etc \
+    && cd /usr && rm -Rf games include \
+    && cd /usr/share && rm -Rf freeswitch man 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
 ONBUILD ADD sip_profiles /usr/local/freeswitch/conf/sip_profiles
