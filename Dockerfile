@@ -104,7 +104,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/share && rm -Rf freeswitch man \
 		&& rm -Rf /tmp/* \
     && rm -Rf /var/log/* \
-    && rm -Rf /var/lib/apt/lists/* 
+    && rm -Rf /var/lib/apt/lists/* \
+		&& rm /usr/local/freeswitch/lib/libfreeswitch.a 
 
 
 ONBUILD ADD dialplan /usr/local/freeswitch/conf/dialplan
