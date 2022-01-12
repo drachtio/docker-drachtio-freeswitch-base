@@ -81,8 +81,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/src \
 		&& patch < switch_rtp.c.patch \
 		&& cd /usr/local/src/freeswitch \
+		&& echo "bootstrap freeswitch" \
 		&& ./bootstrap.sh -j \
+		&& echo "configuring freeswitch" \
 		&& ./configure --with-lws=yes --with-extra=yes \
+		&& echo "building freeswitch" \
 		&& make -j 4 \
 		&& make install \
 		&& cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
