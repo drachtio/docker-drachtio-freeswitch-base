@@ -24,7 +24,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
   	&& git config --global https.postBuffer 524288000 \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.5 \ 
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v3.2.3 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.5.1 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.5.3 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
     && cd  /usr/local/src/grpc \
     && git checkout c66d2cc \
@@ -81,11 +81,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/src \
 		&& patch < switch_rtp.c.patch \
 		&& cd /usr/local/src/freeswitch \
-		&& echo "bootstrap freeswitch" \
 		&& ./bootstrap.sh -j \
-		&& echo "configuring freeswitch" \
 		&& ./configure --with-lws=yes --with-extra=yes \
-		&& echo "building freeswitch" \
 		&& make -j 4 \
 		&& make install \
 		&& cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
@@ -102,6 +99,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 	  && cd /usr/local && rm -Rf src share include games etc \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
+    && rm /usr/local/freeswitch/lib/libfreeswitch.a \
 		&& rm -Rf /tmp/* \
     && rm -Rf /var/log/* \
     && rm -Rf /var/lib/apt/lists/* \
