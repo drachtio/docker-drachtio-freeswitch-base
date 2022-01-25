@@ -1,6 +1,6 @@
 FROM debian:buster-slim
 
-COPY ./files/* /tmp
+COPY ./files/* /tmp/
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
@@ -91,8 +91,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/conference.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& rm -Rf /usr/local/freeswitch/conf/dialplan/* \
 		&& rm -Rf /usr/local/freeswitch/conf/sip_profiles/* \
-		&& cp /tmp/mrf_dialplan.xml /usr/local/freeswitch/conf/dialplan \
-		&& cp /tmp/mrf_sip_profile.xml /usr/local/freeswitch/conf/sip_profiles \
 		&& cp /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& sed -i -e 's/global_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/global_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
 		&& sed -i -e 's/outbound_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/outbound_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
