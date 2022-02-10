@@ -1,0 +1,11 @@
+--- switch_core_media.c	2022-02-10 11:19:05.000000000 -0500
++++ switch_core_media_new.c	2022-02-10 11:21:04.000000000 -0500
+@@ -2764,7 +2764,7 @@
+ 
+ 	idx = count - (seq - want_seq);
+ 
+-	if (idx < 0) {
++	if (idx < 0 || idx >= MAX_RED_FRAMES) {
+ 		*new_datalen = 0;
+ 		return 0;
+ 	}

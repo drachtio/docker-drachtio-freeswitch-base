@@ -50,6 +50,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/modules.conf.in.extra /usr/local/src/freeswitch/build/modules.conf.in \
 		&& cp /tmp/modules.conf.vanilla.xml.extra /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml \
 		&& cp /tmp/switch_rtp.c.patch /usr/local/src/freeswitch/src \ 
+		&& cp /tmp/switch_core_media.c.patch /usr/local/src/freeswitch/src \ 
 		&& sed -i -r -e 's/(.*AM_CFLAGS\))/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
 		&& sed -i -r -e 's/(.*-std=c++11)/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
 		&& cd /usr/local/src/libwebsockets \
@@ -80,6 +81,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch/src \
 		&& patch < switch_rtp.c.patch \
+		&& patch < switch_core_media.c.patch \
 		&& cd /usr/local/src/freeswitch \
 		&& ./bootstrap.sh -j \
 		&& ./configure --with-lws=yes --with-extra=yes \
