@@ -10,7 +10,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev lsb-release \
 		libhiredis-dev gperf libspandsp-dev default-libmysqlclient-dev htop dnsutils \
 		gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev \
-		libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged \
+		libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged libgoogle-perftools-dev \
 		libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev \
 		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
@@ -24,7 +24,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
   	&& git config --global https.postBuffer 524288000 \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.5 \ 
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v3.2.3 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.5.12 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.5.13 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
     && cd  /usr/local/src/grpc \
     && git checkout c66d2cc \
@@ -51,6 +51,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/modules.conf.vanilla.xml.extra /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml \
 		&& cp /tmp/switch_rtp.c.patch /usr/local/src/freeswitch/src \ 
 		&& cp /tmp/switch_core_media.c.patch /usr/local/src/freeswitch/src \ 
+		&& cp /tmp/mod_avmd.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
 		&& sed -i -r -e 's/(.*AM_CFLAGS\))/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
 		&& sed -i -r -e 's/(.*-std=c++11)/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
 		&& cd /usr/local/src/libwebsockets \
@@ -82,9 +83,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/src \
 		&& patch < switch_rtp.c.patch \
 		&& patch < switch_core_media.c.patch \
+		&& cd mod/applications/mod_avmd \
+		&& patch < mod_avmd.c.patch \
 		&& cd /usr/local/src/freeswitch \
 		&& ./bootstrap.sh -j \
-		&& ./configure --with-lws=yes --with-extra=yes \
+		&& ./configure --with-lws=yes --with-extra=yes --enable-tcmalloc=yes \
 		&& make -j 4 \
 		&& make install \
 		&& cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
