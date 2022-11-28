@@ -15,8 +15,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
 		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
-		&& tar xvfz SpeechSDK-Linux-1.24.0.tar.gz \
-		&& cd SpeechSDK-Linux-1.24.0 \
+		&& tar xvfz SpeechSDK-Linux-1.24.2.tar.gz \
+		&& cd SpeechSDK-Linux-1.24.2 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
 		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.CognitiveServices.*.so /usr/local/lib/ \
@@ -26,7 +26,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
   	&& git config --global https.postBuffer 524288000 \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.5 \ 
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v3.2.3 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.6.2 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.6.3 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
     && cd  /usr/local/src/grpc \
     && git checkout c66d2cc \
@@ -47,6 +47,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_deepgram_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_deepgram_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_lex /usr/local/src/freeswitch/src/mod/applications/mod_aws_lex \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_ibm_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_ibm_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/mod_google_tts \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/mod_dialogflow \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_nuance_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_nuance_transcribe \
