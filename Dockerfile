@@ -34,7 +34,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
 		&& git clone https://github.com/drachtio/riva-asr-grpc-api.git -b main \
 		&& git clone https://github.com/drachtio/soniox-asr-grpc-api.git -b main \
-		&& git clone https://github.com/freeswitch/spandsp.git -b 728b60abdd1a71e254b8e831e9156521d788b2b9 \ 
+		&& git clone https://github.com/freeswitch/spandsp.git \ 
 		&& git clone https://github.com/freeswitch/sofia-sip.git -b master \ 
 		&& git clone https://github.com/dpirch/libfvad.git \ 
 		&& git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \ 
@@ -71,6 +71,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/libs/libfvad \
 		&& autoreconf -i && ./configure && make -j 4 &&make install \
 		&& cd /usr/local/src/freeswitch/libs/spandsp \
+    && git checkout 728b60abdd1a71e254b8e831e9156521d788b2b9 \
 		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/sofia-sip \
 		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
