@@ -81,26 +81,26 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/libwebsockets \
 		&& mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
 		&& cd /usr/local/src/freeswitch/libs/libfvad \
-		&& autoreconf -i && ./configure && make -j 4 &&make install \
+		&& autoreconf -i && ./configure && make &&make install \
 		&& cd /usr/local/src/freeswitch/libs/spandsp \
     && git checkout 728b60abdd1a71e254b8e831e9156521d788b2b9 \
-		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
+		&& ./bootstrap.sh && ./configure && make && make install \
 		&& cd /usr/local/src/freeswitch/libs/sofia-sip \
-		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
+		&& ./bootstrap.sh && ./configure && make && make install \
 		&& cd /usr/local/src/freeswitch/libs/aws-c-common \
 		&& mkdir -p build && cd build \
 		&& cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-		&& make -j 4 && make install \
+		&& make && make install \
 		&& cd /usr/local/src/freeswitch/libs/aws-sdk-cpp \
 		&& mkdir -p build && cd build \
 		&& cmake .. -DBUILD_ONLY="lexv2-runtime;transcribestreaming" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-		&& make -j 4 && make install \
+		&& make && make install \
 		&& cd /usr/local/src/grpc \
 		&& git submodule update --init --recursive \
 		&& mkdir -p cmake/build \
 		&& cd cmake/build \
 		&& cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
-		&& make -j 4 && make install \
+		&& make && make install \
 		&& cd /usr/local/src/freeswitch/libs/googleapis \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
@@ -116,7 +116,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch \
 		&& ./bootstrap.sh -j \
 		&& ./configure --with-lws=yes --with-extra=yes --enable-tcmalloc=yes \
-		&& make -j 4 \
+		&& make \
 		&& make install \
 		&& cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& cp /tmp/event_socket.conf.xml /usr/local/freeswitch/conf/autoload_configs \
