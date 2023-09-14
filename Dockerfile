@@ -24,28 +24,33 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src \
 		&& git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
-		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.5 \ 
+		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \ 
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.2 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.1 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.2 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
     && cd  /usr/local/src/grpc \
-    && git checkout c66d2cc \
+    && git checkout v1.57.0 \
 		&& cd /usr/local/src/freeswitch/libs \
 		&& git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
 		&& git clone https://github.com/drachtio/riva-asr-grpc-api.git -b main \
 		&& git clone https://github.com/drachtio/soniox-asr-grpc-api.git -b main \
-		&& git clone https://github.com/freeswitch/spandsp.git \ 
+		&& git clone https://github.com/drachtio/cobalt-asr-grpc-api.git -b main \
 		&& git clone https://github.com/freeswitch/sofia-sip.git -b master \ 
 		&& git clone https://github.com/dpirch/libfvad.git \ 
 		&& git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \ 
 		&& git clone https://github.com/googleapis/googleapis -b master \
 		&& cd googleapis \
-		&& git checkout e9da6f8b469c52b83f900e820be30762e9e05c57 \
+		&& git checkout 29374574304f3356e64423acc9ad059fe43f09b5 \
 		&& cd .. \
+		&& git clone https://github.com/freeswitch/spandsp.git \ 
+    && cd spandsp \
+    && git checkout 0d2e6ac \
+    && cd .. \
 		&& git clone https://github.com/awslabs/aws-c-common.git \ 
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_aws_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_azure_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_azure_transcribe \
+		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_cobalt_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_cobalt_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_deepgram_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_deepgram_transcribe \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_lex /usr/local/src/freeswitch/src/mod/applications/mod_aws_lex \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
@@ -66,6 +71,13 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /tmp/mod_httapi.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
 		&& sed -i -r -e 's/(.*AM_CFLAGS\))/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
 		&& sed -i -r -e 's/(.*-std=c++11)/\1 -g -O0/g' /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork/Makefile.am \
+		&& cd /usr/local/src/freeswitch/src \
+		&& patch < switch_rtp.c.patch \
+		&& patch < switch_core_media.c.patch \
+		&& cd /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
+		&& patch < mod_avmd.c.patch \
+		&& cd /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
+		&& patch <mod_httapi.c.patch \
 		&& cd /usr/local/src/libwebsockets \
 		&& mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
 		&& cd /usr/local/src/freeswitch/libs/libfvad \
@@ -93,18 +105,13 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
 		&& LANGUAGE=cpp make -j 4 \
-		&& cd /usr/local/src/freeswitch/src \
-		&& patch < switch_rtp.c.patch \
-		&& patch < switch_core_media.c.patch \
-		&& cd /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
-		&& patch < mod_avmd.c.patch \
-		&& cd /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
-		&& patch <mod_httapi.c.patch \
 		&& cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
 		&& LANGUAGE=cpp make \
 		&& cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
 		&& LANGUAGE=cpp make \
 		&& cd /usr/local/src/freeswitch/libs/soniox-asr-grpc-api \
+		&& LANGUAGE=cpp make \
+		&& cd /usr/local/src/freeswitch/libs/cobalt-asr-grpc-api \
 		&& LANGUAGE=cpp make \
 		&& cd /usr/local/src/freeswitch \
 		&& ./bootstrap.sh -j \
