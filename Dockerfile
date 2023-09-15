@@ -104,7 +104,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/libs/googleapis \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
-		&& LANGUAGE=cpp make -j 4 \
+		&& LANGUAGE=cpp make \
 		&& cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
 		&& LANGUAGE=cpp make \
 		&& cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
