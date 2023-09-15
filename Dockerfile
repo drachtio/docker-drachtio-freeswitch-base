@@ -13,7 +13,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm valgrind libswscale-dev haveged \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
-		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
+		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:$LD_LIBRARY_PATH \
+		&& export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH \
 		&& cd /tmp \
 		&& tar xvfz SpeechSDK-Linux-1.31.0.tar.gz \
 		&& cd SpeechSDK-Linux-1.31.0 \
@@ -28,8 +29,18 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.2 \
 		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.2 \ 
 		&& git clone https://github.com/grpc/grpc -b master \
-    && cd  /usr/local/src/grpc \
-    && git checkout v1.57.0 \
+    && cd  grpc && git checkout v1.57.0 \
+		&& git submodule update --init --recursive \
+		&& mkdir -p cmake/build \
+		&& cd cmake/build \
+		&& cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
+    && echo "building grpc" \
+		&& make -j 4 \
+    && echo "installing grpc" \
+    && make install \
+    && echo "done installing grpc, checking pkg-config --libs " \
+    && pkg-config --libs grpc++ grpc \
+    && echo "done checking pkg-config --libs " \
 		&& cd /usr/local/src/freeswitch/libs \
 		&& git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
 		&& git clone https://github.com/drachtio/riva-asr-grpc-api.git -b main \
@@ -39,13 +50,9 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git clone https://github.com/dpirch/libfvad.git \ 
 		&& git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \ 
 		&& git clone https://github.com/googleapis/googleapis -b master \
-		&& cd googleapis \
-		&& git checkout 29374574304f3356e64423acc9ad059fe43f09b5 \
-		&& cd .. \
+		&& cd googleapis && git checkout 29374574304f3356e64423acc9ad059fe43f09b5 && cd .. \
 		&& git clone https://github.com/freeswitch/spandsp.git \ 
-    && cd spandsp \
-    && git checkout 0d2e6ac \
-    && cd .. \
+    && cd spandsp && git checkout 0d2e6ac && cd .. \
 		&& git clone https://github.com/awslabs/aws-c-common.git \ 
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
 		&& cp -r /usr/local/src/drachtio-freeswitch-modules/modules/mod_aws_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_aws_transcribe \
@@ -79,45 +86,42 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
 		&& patch <mod_httapi.c.patch \
 		&& cd /usr/local/src/libwebsockets \
-		&& mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
+		&& mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/libfvad \
-		&& autoreconf -i && ./configure && make &&make install \
+		&& autoreconf -i && ./configure && make -j 4 &&make install \
 		&& cd /usr/local/src/freeswitch/libs/spandsp \
     && git checkout 728b60abdd1a71e254b8e831e9156521d788b2b9 \
-		&& ./bootstrap.sh && ./configure && make && make install \
+		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/sofia-sip \
-		&& ./bootstrap.sh && ./configure && make && make install \
+		&& ./bootstrap.sh && ./configure && make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/aws-c-common \
 		&& mkdir -p build && cd build \
 		&& cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-		&& make && make install \
+		&& make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/aws-sdk-cpp \
 		&& mkdir -p build && cd build \
 		&& cmake .. -DBUILD_ONLY="lexv2-runtime;transcribestreaming" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-		&& make && make install \
-		&& cd /usr/local/src/grpc \
-		&& git submodule update --init --recursive \
-		&& mkdir -p cmake/build \
-		&& cd cmake/build \
-		&& cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
-		&& make && make install \
+		&& make -j 4 && make install \
 		&& cd /usr/local/src/freeswitch/libs/googleapis \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
 		&& sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
-		&& LANGUAGE=cpp make \
+		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
-		&& LANGUAGE=cpp make \
+		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
-		&& LANGUAGE=cpp make \
+		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch/libs/soniox-asr-grpc-api \
-		&& LANGUAGE=cpp make \
+		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch/libs/cobalt-asr-grpc-api \
-		&& LANGUAGE=cpp make \
+		&& LANGUAGE=cpp make -j 4 \
 		&& cd /usr/local/src/freeswitch \
 		&& ./bootstrap.sh -j \
-		&& ./configure --with-lws=yes --with-extra=yes --enable-tcmalloc=yes \
-		&& make \
+		&& ./configure --enable-tcmalloc=yes --with-lws=yes --with-extra=yes --with-aws=yes \
+    && echo "building freeswitch" \
+		&& make -j 4 \
+    && echo "installing freeswitch" \
 		&& make install \
+    && echo "copying config into place" \
 		&& cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& cp /tmp/event_socket.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& cp /tmp/switch.conf.xml /usr/local/freeswitch/conf/autoload_configs \
@@ -127,6 +131,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml /usr/local/freeswitch/conf/autoload_configs \
 		&& sed -i -e 's/global_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/global_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
 		&& sed -i -e 's/outbound_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/outbound_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
+    && echo "clearing out build files" \
 	  && cd /usr/local && rm -Rf src share include games etc \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
