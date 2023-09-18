@@ -33,7 +33,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cd SpeechSDK-Linux-1.31.0 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
-		&& cp /usr/local/lib/MicrosoftSpeechSDK/arm64/libMicrosoft.*.so /usr/local/lib/ \
+		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.*.so /usr/local/lib/ \
 		&& ls -lrt /usr/local/lib/ \
 		&& cd /usr/local/src \
 		&& git config --global pull.rebase true \
