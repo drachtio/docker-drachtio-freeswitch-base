@@ -3,7 +3,7 @@ FROM debian:bullseye-slim
 COPY ./files/* /tmp/
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
-    apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
+    && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
     && apt-get install -y --quiet --no-install-recommends \
     python-is-python3 lsof gcc g++ make cmake build-essential git autoconf automake default-mysql-client redis-tools \
     curl telnet libtool libtool-bin libssl-dev libcurl4-openssl-dev libz-dev systemd-coredump liblz4-tool \
