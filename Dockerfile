@@ -3,19 +3,13 @@ FROM debian:bullseye-slim
 COPY ./files/* /tmp/
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
-    && export FREESWITCH_VERSION=v1.10.10 \
-    && export SPAN_DSP_VERSION=0d2e6ac \
-    && export GRPC_VERSION=v1.57.0 \
-    && export GOOGLE_API_VERSION=29374574304f3356e64423acc9ad059fe43f09b5 \
-    && export AWS_SDK_VERSION=1.8.129 \
-    && export LWS_VERSION=v4.3.2 \
-    && export MODULES_VERSION=v0.8.2 \
-    && echo "freeswitch version to install is ${FREESWITCH_VERSION}" \
-    && echo "drachtio modules version to install is ${MODULES_VERSION}" \
-    && echo "GRPC version to install is ${GRPC_VERSION}" \
-    && echo "GOOGLE_API_VERSION version to install is ${GOOGLE_API_VERSION}" \
-    && echo "AWS_SDK_VERSION version to install is ${AWS_SDK_VERSION}" \
-    && echo "LWS_VERSION version to install is ${LWS_VERSION}" \
+    && FREESWITCH_VERSION=v1.10.10 \
+    && SPAN_DSP_VERSION=0d2e6ac \
+    && GRPC_VERSION=v1.57.0 \
+    && GOOGLE_API_VERSION=29374574304f3356e64423acc9ad059fe43f09b5 \
+    && AWS_SDK_VERSION=1.8.129 \
+    && LWS_VERSION=v4.3.2 \
+    && MODULES_VERSION=v0.8.2 \
     && apt-get update && apt-get -y --quiet --allow-remove-essential upgrade \
     && apt-get install -y --quiet --no-install-recommends \
     python-is-python3 lsof gcc g++ make cmake build-essential git autoconf automake default-mysql-client redis-tools \
@@ -26,8 +20,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm valgrind libswscale-dev haveged libre2-dev \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
-		&& export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:$LD_LIBRARY_PATH \
-		&& export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH \
 		&& cd /tmp \
 		&& tar xvfz SpeechSDK-Linux-1.31.0.tar.gz \
 		&& cd SpeechSDK-Linux-1.31.0 \
@@ -77,39 +69,29 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp /tmp/mod_avmd.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
     && cp /tmp/mod_httapi.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
     && cd /usr/local/src/freeswitch/src \
-    && echo patching switch_rtp \
     && patch < switch_rtp.c.patch \
-    && echo patching switch_core_media \
     && patch < switch_core_media.c.patch \
     && cd /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
-    && echo patching mod_avmd \
     && patch < mod_avmd.c.patch \
     && cd /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
-    && echo patching mod_httapi \
     && patch < mod_httapi.c.patch \
-    && echo building lws \
     && cd /usr/local/src/libwebsockets \
     && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
     && cd /usr/local/src/freeswitch/libs/libfvad \
-    && echo building libfvad \
-    && autoreconf -i && ./configure && make -j 4 && make install \
-    && echo building spandsp \
+    && autoreconf -i && ./configure && make && make install \
     && cd /usr/local/src/freeswitch/libs/spandsp \
-    && ./bootstrap.sh && ./configure && make -j 4 && make install \
-    && echo building sofia \
+    && ./bootstrap.sh && ./configure && make && make install \
     && cd /usr/local/src/freeswitch/libs/sofia-sip \
-    && ./bootstrap.sh && ./configure && make -j 4 && make install \
-    && echo building aws-c-common \
+    && ./bootstrap.sh && ./configure && make && make install \
     && cd /usr/local/src/freeswitch/libs/aws-c-common \
     && mkdir -p build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-    && make -j 4 && make install \
-    && echo building aws-sdk-cpp \
+    && make && make install \
     && cd /usr/local/src/freeswitch/libs/aws-sdk-cpp \
     && git submodule update --init --recursive \
     && mkdir -p build && cd build \
     && cmake .. -DBUILD_ONLY="lexv2-runtime;transcribestreaming" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-    && make -j 4 && make install \
+    && make && make install \
     && find /usr/local/src/freeswitch/libs/aws-sdk-cpp/ -type f -name "*.pc" | xargs cp -t /usr/local/lib/pkgconfig/ \
     && echo building grpc \
     && cd /usr/local/src/grpc \
@@ -117,31 +99,25 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && mkdir -p cmake/build \
     && cd cmake/build \
     && cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
-    && make -j 4 \
+    && make \
     && make install \
-    && echo building googleapis \
     && cd /usr/local/src/freeswitch/libs/googleapis \
     && echo "Ref: https://github.com/GoogleCloudPlatform/cpp-samples/issues/113" \
     && sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
     && sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
-    && LANGUAGE=cpp make -j 4 \
-    && echo "building protobuf stubs for Nuance asr" \
+    && LANGUAGE=cpp make \
     && cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
     && LANGUAGE=cpp make \
-    && echo "building protobuf stubs for nvidia riva asr" \
     && cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
     && LANGUAGE=cpp make \
-    && echo "building protobuf stubs for soniox asr" \
     && cd /usr/local/src/freeswitch/libs/soniox-asr-grpc-api \
     && LANGUAGE=cpp make \
-    && echo "building protobuf stubs for cobalt asr" \
     && cd /usr/local/src/freeswitch/libs/cobalt-asr-grpc-api \
     && LANGUAGE=cpp make \
-    && echo "building freeswitch" \
     && cd /usr/local/src/freeswitch \
     && ./bootstrap.sh -j \
     && ./configure --enable-tcmalloc=yes --with-lws=yes --with-extra=yes --with-aws=yes \
-    && make -j 4 \
+    && make \
     && make install \
     && make cd-sounds-install cd-moh-install \
     && cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
@@ -153,10 +129,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp /tmp/mrf_dialplan.xml /usr/local/freeswitch/conf/dialplan \
     && cp /tmp/mrf_sip_profile.xml /usr/local/freeswitch/conf/sip_profiles \
     && cp /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml /usr/local/freeswitch/conf/autoload_configs \
-    && echo "setting codecs in vars.xml" \
 		&& sed -i -e 's/global_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/global_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
 		&& sed -i -e 's/outbound_codec_prefs=OPUS,G722,PCMU,PCMA,H264,VP8/outbound_codec_prefs=PCMU,PCMA,OPUS,G722/g' /usr/local/freeswitch/conf/vars.xml \
-    && echo "clearing out build files" \
 	  && cd /usr/local && rm -Rf src share include games etc \
     && cd /usr && rm -Rf games include \
     && cd /usr/share && rm -Rf freeswitch man \
