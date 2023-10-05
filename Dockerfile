@@ -25,9 +25,9 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
 		&& git config --global pull.rebase true \
-		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \ 
+		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.2 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.2 \ 
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.3 \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
