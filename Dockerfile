@@ -15,8 +15,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
-		&& tar xvfz SpeechSDK-Linux-1.32.0.tar.gz \
-		&& cd SpeechSDK-Linux-1.32.0 \
+		&& tar xvfz SpeechSDK-Linux-1.32.1.tar.gz \
+		&& cd SpeechSDK-Linux-1.32.1 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
 		&& cp /usr/local/lib/MicrosoftSpeechSDK/arm64/libMicrosoft.*.so /usr/local/lib/ \
