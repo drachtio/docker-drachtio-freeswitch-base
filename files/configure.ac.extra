@@ -2146,6 +2146,7 @@ AC_CONFIG_FILES([Makefile
 		src/mod/Makefile
     src/mod/applications/mod_audio_fork/Makefile
     src/mod/applications/mod_aws_lex/Makefile
+    src/mod/applications/mod_assemblyai_transcribe/Makefile
     src/mod/applications/mod_aws_transcribe/Makefile
     src/mod/applications/mod_azure_transcribe/Makefile
     src/mod/applications/mod_cobalt_transcribe/Makefile
