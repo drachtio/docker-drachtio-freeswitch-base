@@ -15,8 +15,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
-		&& tar xvfz SpeechSDK-Linux-1.32.1.tar.gz \
-		&& cd SpeechSDK-Linux-1.32.1 \
+		&& tar xvfz SpeechSDK-Linux-1.33.0.tar.gz \
+		&& cd SpeechSDK-Linux-1.33.0 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
 		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.*.so /usr/local/lib/ \
@@ -27,7 +27,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git config --global pull.rebase true \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.2 \
-		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.11 \
+		&& git clone https://github.com/drachtio/drachtio-freeswitch-modules.git -b v0.8.12 \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
@@ -37,7 +37,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && git clone https://github.com/freeswitch/spandsp.git && cd spandsp && git checkout 0d2e6ac && cd .. \
     && git clone https://github.com/freeswitch/sofia-sip.git -b master \
     && git clone https://github.com/dpirch/libfvad.git \
-    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \
+    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.11.202 \
     && git clone https://github.com/googleapis/googleapis -b master \
     && cd googleapis && git checkout 29374574304f3356e64423acc9ad059fe43f09b5 && cd .. \
     && git clone https://github.com/awslabs/aws-c-common.git \
