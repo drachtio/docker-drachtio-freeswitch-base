@@ -54,7 +54,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/freeswitch-modules/mod_nvidia_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_nvidia_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_soniox_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_soniox_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_jambonz_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_jambonz_transcribe \
-    && cp -r /usr/local/src/freeswitch-modules/mod_google_tts /usr/local/src/freeswitch/src/mod/applications/mod_google_tts \
     && cp -r /usr/local/src/freeswitch-modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/mod_dialogflow \
     && cp /tmp/configure.ac.extra /usr/local/src/freeswitch/configure.ac \
     && cp /tmp/Makefile.am.extra /usr/local/src/freeswitch/Makefile.am \
