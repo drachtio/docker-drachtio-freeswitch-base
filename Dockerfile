@@ -37,7 +37,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && git clone https://github.com/freeswitch/spandsp.git && cd spandsp && git checkout 0d2e6ac && cd .. \
     && git clone https://github.com/freeswitch/sofia-sip.git -b master \
     && git clone https://github.com/dpirch/libfvad.git \
-    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.11.202 \
+    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \
     && git clone https://github.com/googleapis/googleapis -b master \
     && cd googleapis && git checkout 29374574304f3356e64423acc9ad059fe43f09b5 && cd .. \
     && git clone https://github.com/awslabs/aws-c-common.git \
