@@ -1848,8 +1848,11 @@ static const char* limitedHeaders[] = {
 	"variable_playback_seconds",
 	"variable_playback_ms",
 	"variable_playback_last_offset_pos",
+  "variable_playback_samples",
 	"variable_playback_terminators",
-	"variable_dtmf_type"
+	"variable_dtmf_type",
+  "variable_myDigitBuffer",
+  "variable_myDigitBuffer_invalid"
 };
 static int limitedHeadersCount = sizeof(limitedHeaders) / sizeof(char *);
 static int compare_strings(const void *a, const void *b) {
@@ -1873,7 +1876,8 @@ SWITCH_DECLARE(switch_status_t) switch_event_serialize_json_obj(switch_event_t *
 
   /* DH: return minimal set of headers for CHANNEL_EXECUTE */
   if (bsearch(&eventName, limitedEvents, limitedEventsCount, sizeof(char *), compare_strings) != NULL ||
-    strstr(eventName, "_transcribe::") != NULL) {
+    strstr(eventName, "_transcribe::") != NULL ||
+    strstr(eventName, "::connect")) {
     limitHeaders = 1;
   }
 
@@ -1881,8 +1885,7 @@ SWITCH_DECLARE(switch_status_t) switch_event_serialize_json_obj(switch_event_t *
     if (limitHeaders &&
       bsearch(&hp->name, limitedHeaders, limitedHeadersCount, sizeof(char *), compare_strings) == NULL &&
       0 != strncmp(hp->name, "Application", 11) &&
-      0 != strncmp(hp->name, "transcription", 16) && 
-      0 != strcmp(hp->name, "media-bugname")) {
+      0 != strncmp(hp->name, "transcription", 13)) {
       continue;
     }
 		if (hp->idx) {
