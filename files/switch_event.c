@@ -1866,7 +1866,7 @@ SWITCH_DECLARE(switch_status_t) switch_event_serialize_json_obj(switch_event_t *
     if (limitHeaders &&
       bsearch(&hp->name, limitedHeaders, limitedHeadersCount, sizeof(char *), compare_strings) == NULL &&
       0 != strncmp(hp->name, "Application", 11) &&
-      0 != strncmp(eventName, "variable", 8) == 0 &&
+      0 != strncmp(eventName, "variable", 8) &&
       0 != strncmp(hp->name, "transcription", 16) && 
       0 != strcmp(hp->name, "media-bugname")) {
       continue;
