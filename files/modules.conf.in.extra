@@ -1,10 +1,11 @@
 applications/mod_audio_fork
-applications/mod_assemblyai_transcribe
 applications/mod_aws_lex
+applications/mod_assemblyai_transcribe
 applications/mod_aws_transcribe
 applications/mod_azure_transcribe
 applications/mod_cobalt_transcribe
 applications/mod_deepgram_transcribe
+applications/mod_elevenlabs_tts
 applications/mod_google_transcribe
 applications/mod_ibm_transcribe
 applications/mod_jambonz_transcribe
@@ -174,7 +175,7 @@ say/mod_say_en
 #say/mod_say_th
 #say/mod_say_zh
 #timers/mod_posix_timer
-#timers/mod_timerfd
+timers/mod_timerfd
 xml_int/mod_xml_cdr
 #xml_int/mod_xml_curl
 #xml_int/mod_xml_ldap

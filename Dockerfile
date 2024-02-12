@@ -10,7 +10,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     libxtables-dev libip6tc-dev libip4tc-dev  libiptc-dev libavformat-dev liblua5.1-0-dev libavfilter-dev libavcodec-dev libswresample-dev \
     libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev lsb-release libpq-dev php-dev \
     libhiredis-dev gperf libspandsp-dev default-libmysqlclient-dev htop dnsutils gdb libtcmalloc-minimal4 \
-    gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev \
+    gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev libboost-all-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged libre2-dev \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
@@ -22,12 +22,19 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.*.so /usr/local/lib/ \
 		&& ls -lrt /usr/local/lib/ \
 		&& cd /usr/local/src \
+    && export CMAKE_VERSION=3.28.3 \
+    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh \
+    && chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh \
+    && ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local \
+    && rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh \
+    && cmake --version \
+    && cd /usr/local/src \
     && git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
 		&& git config --global pull.rebase true \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
-		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.2 \
-		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.0.4 \
+		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.3 \
+		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.0.7 \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
@@ -55,6 +62,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/freeswitch-modules/mod_soniox_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_soniox_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_jambonz_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_jambonz_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_dialogflow /usr/local/src/freeswitch/src/mod/applications/mod_dialogflow \
+    && cp -r /usr/local/src/freeswitch-modules/mod_elevenlabs_tts /usr/local/src/freeswitch/src/mod/applications/mod_elevenlabs_tts \
     && cp /tmp/configure.ac.extra /usr/local/src/freeswitch/configure.ac \
     && cp /tmp/Makefile.am.extra /usr/local/src/freeswitch/Makefile.am \
     && cp /tmp/modules.conf.in.extra /usr/local/src/freeswitch/build/modules.conf.in \

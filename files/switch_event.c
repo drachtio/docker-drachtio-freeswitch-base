@@ -1815,7 +1815,9 @@ SWITCH_DECLARE(switch_status_t) switch_event_create_json(switch_event_t **event,
 static int sorted = 0;
 static const char* limitedEvents[] = {
   "CHANNEL_EXECUTE",
-  "CHANNEL_EXECUTE_COMPLETE"
+  "CHANNEL_EXECUTE_COMPLETE",
+  "PLAYBACK_START",
+  "PLAYBACK_STOP"
 };
 static int limitedEventsCount = sizeof(limitedEvents) / sizeof(char *);
 static const char* limitedHeaders[] = {
@@ -1842,9 +1844,12 @@ static const char* limitedHeaders[] = {
 	"Member-Type",
   "milliseconds",
 	"Path",
+  "Playback-File-Path",
+  "Playback-File-Type",
   "Unique-ID",
   "samples",
   "seconds",
+  "variable_current_application",
 	"variable_playback_seconds",
 	"variable_playback_ms",
 	"variable_playback_last_offset_pos",
@@ -1884,6 +1889,7 @@ SWITCH_DECLARE(switch_status_t) switch_event_serialize_json_obj(switch_event_t *
 	for (hp = event->headers; hp; hp = hp->next) {
     if (limitHeaders &&
       bsearch(&hp->name, limitedHeaders, limitedHeadersCount, sizeof(char *), compare_strings) == NULL &&
+      0 != strncmp(hp->name, "variable_tts_", 13) &&
       0 != strncmp(hp->name, "Application", 11) &&
       0 != strncmp(hp->name, "transcription", 13)) {
       continue;

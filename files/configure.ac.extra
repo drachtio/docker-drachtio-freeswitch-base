@@ -2144,14 +2144,15 @@ AC_CONFIG_FILES([Makefile
 		tests/unit/Makefile
 		src/Makefile
 		src/mod/Makefile
+    src/mod/applications/mod_assemblyai_transcribe/Makefile
     src/mod/applications/mod_audio_fork/Makefile
     src/mod/applications/mod_aws_lex/Makefile
-    src/mod/applications/mod_assemblyai_transcribe/Makefile
     src/mod/applications/mod_aws_transcribe/Makefile
     src/mod/applications/mod_azure_transcribe/Makefile
     src/mod/applications/mod_cobalt_transcribe/Makefile
-    src/mod/applications/mod_deepgram_transcribe/Makefile
     src/mod/applications/mod_google_transcribe/Makefile
+    src/mod/applications/mod_deepgram_transcribe/Makefile
+    src/mod/applications/mod_elevenlabs_tts/Makefile
     src/mod/applications/mod_ibm_transcribe/Makefile
     src/mod/applications/mod_jambonz_transcribe/Makefile
     src/mod/applications/mod_nuance_transcribe/Makefile
