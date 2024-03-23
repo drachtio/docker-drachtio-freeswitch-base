@@ -1,4 +1,4 @@
-FROM debian:bookword-slim
+FROM debian:bookworm-slim
 
 COPY ./files/* /tmp/
 
