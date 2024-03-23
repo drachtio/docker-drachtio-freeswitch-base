@@ -329,6 +329,8 @@ libs/googleapis/gens/google/cloud/speech/v1/cloud_speech.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1/cloud_speech.grpc.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1p1beta1/cloud_speech.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1p1beta1/cloud_speech.grpc.pb.cc \
+libs/googleapis/gens/google/cloud/speech/v2/cloud_speech.pb.cc \
+libs/googleapis/gens/google/cloud/speech/v2/cloud_speech.grpc.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1p1beta1/resource.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1p1beta1/resource.grpc.pb.cc \
 libs/googleapis/gens/google/cloud/speech/v1/resource.pb.cc \

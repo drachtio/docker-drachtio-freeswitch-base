@@ -22,6 +22,15 @@ AC_CONFIG_HEADERS([libs/xmlrpc-c/xmlrpc_amconfig.h])
 
 AC_CANONICAL_HOST
 
+# DH: for AVX2 and SSE2 SIMD extensions
+m4_include([ax_check_compile_flag.m4])
+AX_CHECK_COMPILE_FLAG([-mavx2], [have_avx2=yes], [have_avx2=no])
+AX_CHECK_COMPILE_FLAG([-msse2], [have_sse2=yes], [have_sse2=no])
+AM_CONDITIONAL([USE_AVX2], [test "x$have_avx2" = "xyes"])
+AM_CONDITIONAL([USE_SSE2], [test "x$have_sse2" = "xyes"])
+AC_SUBST([HAVE_AVX2], [$have_avx2])
+AC_SUBST([HAVE_SSE2], [$have_sse2])
+
 # Absolute source/build directory
 switch_srcdir=`(cd $srcdir && pwd)`
 switch_builddir=`pwd`
@@ -2152,6 +2161,7 @@ AC_CONFIG_FILES([Makefile
     src/mod/applications/mod_cobalt_transcribe/Makefile
     src/mod/applications/mod_google_transcribe/Makefile
     src/mod/applications/mod_deepgram_transcribe/Makefile
+    src/mod/applications/mod_dub/Makefile
     src/mod/applications/mod_elevenlabs_tts/Makefile
     src/mod/applications/mod_whisper_tts/Makefile
     src/mod/applications/mod_ibm_transcribe/Makefile

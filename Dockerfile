@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bookword-slim
 
 COPY ./files/* /tmp/
 
@@ -34,7 +34,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git config --global pull.rebase true \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.3 \
-		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.0.10 \
+		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.1.0 \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
@@ -44,9 +44,9 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && git clone https://github.com/freeswitch/spandsp.git && cd spandsp && git checkout 0d2e6ac && cd .. \
     && git clone https://github.com/freeswitch/sofia-sip.git -b master \
     && git clone https://github.com/dpirch/libfvad.git \
-    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.8.129 \
+    && git clone https://github.com/aws/aws-sdk-cpp.git -b 1.11.283 \
     && git clone https://github.com/googleapis/googleapis -b master \
-    && cd googleapis && git checkout 29374574304f3356e64423acc9ad059fe43f09b5 && cd .. \
+    && cd googleapis && git checkout d81d0b9e6993d6ab425dff4d7c3d05fb2e59fa57 && cd .. \
     && git clone https://github.com/awslabs/aws-c-common.git \
     && cp -r /usr/local/src/freeswitch-modules/mod_audio_fork /usr/local/src/freeswitch/src/mod/applications/mod_audio_fork \
     && cp -r /usr/local/src/freeswitch-modules/mod_aws_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_aws_transcribe \
@@ -55,6 +55,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/freeswitch-modules/mod_aws_lex /usr/local/src/freeswitch/src/mod/applications/mod_aws_lex \
     && cp -r /usr/local/src/freeswitch-modules/mod_cobalt_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_cobalt_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_deepgram_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_deepgram_transcribe \
+    && cp -r /usr/local/src/freeswitch-modules/mod_dub /usr/local/src/freeswitch/src/mod/applications/mod_dub \
     && cp -r /usr/local/src/freeswitch-modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_ibm_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_ibm_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_nuance_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_nuance_transcribe \
@@ -109,9 +110,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && make \
     && make install \
     && cd /usr/local/src/freeswitch/libs/googleapis \
-    && echo "Ref: https://github.com/GoogleCloudPlatform/cpp-samples/issues/113" \
-    && sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
-    && sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
     && LANGUAGE=cpp make \
     && cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
     && LANGUAGE=cpp make \
