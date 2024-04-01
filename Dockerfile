@@ -1,5 +1,9 @@
 FROM debian:bookworm-slim
 
+SHELL ["/bin/bash", "-c"]
+
+ENV PATH="/usr/local/bin:${PATH}"
+
 COPY ./files/* /tmp/
 
 RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
@@ -13,6 +17,18 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev libboost-all-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged libre2-dev \
     libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
+		&& cd /usr/local/src \
+    && which cmake && cmake --version \
+    && apt-get remove --purge -y cmake \
+    && export CMAKE_VERSION=3.28.3 \
+    && ARCH=$(uname -m) && CMAKE_ARCH=$(case "$ARCH" in x86_64) echo "linux-x86_64" ;; arm64|aarch64) echo "linux-aarch64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
+    && echo "Preparing to build cmake for ${ARCH}" \
+    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
+    && chmod +x cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
+    && ./cmake-${CMAKE_VERSION}-linux-${ARCH}.sh --skip-license --prefix=/usr/local \
+    && ln -s /usr/local/bin/cmake /usr/bin/cmake \
+    && rm -f cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
+    && cmake --version \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
 		&& tar xvfz SpeechSDK-Linux-1.36.0.tar.gz \
@@ -21,13 +37,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
 		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.*.so /usr/local/lib/ \
 		&& ls -lrt /usr/local/lib/ \
-		&& cd /usr/local/src \
-    && export CMAKE_VERSION=3.28.3 \
-    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-x86_64.sh \
-    && chmod +x cmake-${CMAKE_VERSION}-linux-x86_64.sh \
-    && ./cmake-${CMAKE_VERSION}-linux-x86_64.sh --skip-license --prefix=/usr/local \
-    && rm -f cmake-${CMAKE_VERSION}-linux-x86_64.sh \
-    && cmake --version \
     && cd /usr/local/src \
     && git config --global http.postBuffer 524288000  \
   	&& git config --global https.postBuffer 524288000 \
