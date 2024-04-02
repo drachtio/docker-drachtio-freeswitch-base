@@ -3,6 +3,7 @@ applications/mod_aws_lex
 applications/mod_assemblyai_transcribe
 applications/mod_aws_transcribe
 applications/mod_azure_transcribe
+applications/mod_azure_tts
 applications/mod_cobalt_transcribe
 applications/mod_deepgram_transcribe
 applications/mod_dub
