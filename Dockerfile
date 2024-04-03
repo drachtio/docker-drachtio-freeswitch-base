@@ -1,4 +1,4 @@
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
 SHELL ["/bin/bash", "-c"]
 
@@ -23,20 +23,22 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && export CMAKE_VERSION=3.28.3 \
     && ARCH=$(uname -m) && CMAKE_ARCH=$(case "$ARCH" in x86_64) echo "linux-x86_64" ;; arm64|aarch64) echo "linux-aarch64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
     && echo "Preparing to build cmake for ${ARCH}" \
-    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
-    && chmod +x cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
-    && ./cmake-${CMAKE_VERSION}-linux-${ARCH}.sh --skip-license --prefix=/usr/local \
+    && wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-${CMAKE_ARCH}.sh \
+    && chmod +x cmake-${CMAKE_VERSION}-${CMAKE_ARCH}.sh \
+    && ./cmake-${CMAKE_VERSION}-${CMAKE_ARCH}.sh --skip-license --prefix=/usr/local \
     && ln -s /usr/local/bin/cmake /usr/bin/cmake \
-    && rm -f cmake-${CMAKE_VERSION}-linux-${ARCH}.sh \
+    && rm -f cmake-${CMAKE_VERSION}-${CMAKE_ARCH}.sh \
     && cmake --version \
-    && ARCH=$(uname -m) && CMAKE_ARCH=$(case "$ARCH" in x86_64) echo "x86" ;; arm64|aarch64) echo "arm64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
+    && echo "copy azure speech sdk" \
+    && ARCH=$(uname -m) && AZURE_ARCH=$(case "$ARCH" in x86_64) echo "x86" ;; arm64|aarch64) echo "arm64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
 		&& tar xvfz SpeechSDK-Linux-1.36.0.tar.gz \
 		&& cd SpeechSDK-Linux-1.36.0 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
-		&& cp /usr/local/lib/MicrosoftSpeechSDK/x64/libMicrosoft.*.so /usr/local/lib/ \
+    && echo "copying azure speech sdk from usr/local/lib/MicrosoftSpeechSDK/${AZURE_ARCH}/libMicrosoft.*.so" \
+		&& cp /usr/local/lib/MicrosoftSpeechSDK/${AZURE_ARCH}/libMicrosoft.*.so /usr/local/lib/ \
 		&& ls -lrt /usr/local/lib/ \
     && cd /usr/local/src \
     && git config --global http.postBuffer 524288000  \
@@ -44,7 +46,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git config --global pull.rebase true \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.3 \
-		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.1.2 \
+		&& git clone https://github.com/jambonz/freeswitch-modules.git -b  main \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
@@ -138,7 +140,6 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && ./configure --enable-tcmalloc=yes --with-lws=yes --with-extra=yes --with-aws=yes \
     && make \
     && make install \
-    && make cd-sounds-install cd-moh-install \
     && cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
     && cp /tmp/event_socket.conf.xml /usr/local/freeswitch/conf/autoload_configs \
     && cp /tmp/switch.conf.xml /usr/local/freeswitch/conf/autoload_configs \
