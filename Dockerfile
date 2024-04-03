@@ -30,7 +30,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && rm -f cmake-${CMAKE_VERSION}-${CMAKE_ARCH}.sh \
     && cmake --version \
     && echo "copy azure speech sdk" \
-    && ARCH=$(uname -m) && AZURE_ARCH=$(case "$ARCH" in x86_64) echo "x86" ;; arm64|aarch64) echo "arm64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
+    && ARCH=$(uname -m) && AZURE_ARCH=$(case "$ARCH" in x86_64) echo "x64" ;; arm64|aarch64) echo "arm64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
 		&& tar xvfz SpeechSDK-Linux-1.36.0.tar.gz \
