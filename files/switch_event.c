@@ -1812,7 +1812,7 @@ SWITCH_DECLARE(switch_status_t) switch_event_create_json(switch_event_t **event,
 	return SWITCH_STATUS_SUCCESS;
 }
 
-static int sorted = 0;
+/* DH: it's critical this is kep in sorted ASCII order */
 static const char* limitedEvents[] = {
   "CHANNEL_EXECUTE",
   "CHANNEL_EXECUTE_COMPLETE",
@@ -1820,44 +1820,46 @@ static const char* limitedEvents[] = {
   "PLAYBACK_STOP"
 };
 static int limitedEventsCount = sizeof(limitedEvents) / sizeof(char *);
+
+/* DH: it's critical this is kep in sorted ASCII order (note uppercase sorts before lowercase)*/
 static const char* limitedHeaders[] = {
-	"Action",
+  "Action",
   "Channel-Call-UUID",
   "Conference-Name",
   "Conference-Size",
-	"Conference-Unique-ID",
+  "Conference-Unique-ID",
+  "Core-UUID",
+  "DTMF-Digit",
+  "DTMF-Duration",
+  "DTMF-SSRC",
+  "DTMF-Source",
+  "DTMF-Timestamp",
+  "Detected-Fax-Tone",
+  "Detected-Tone",
+  "Error",
   "Event-Name",
   "Event-Subclass",
-  "Core-UUID",
-	"Detected-Fax-Tone",
-	"Detected-Tone",
-	"DTMF-Digit",
-	"DTMF-Duration",
-	"DTMF-Source",
-	"DTMF-SSRC",
-	"DTMF-Timestamp",
-  "Error",
   "Event-UUID",
-  "media-bugname",
-	"Member-ID",
-	"Member-Ghost",
-	"Member-Type",
-  "milliseconds",
-	"Path",
+  "Member-Ghost",
+  "Member-ID",
+  "Member-Type",
+  "Path",
   "Playback-File-Path",
   "Playback-File-Type",
   "Unique-ID",
+  "media-bugname",
+  "milliseconds",
   "samples",
   "seconds",
   "variable_current_application",
-	"variable_playback_seconds",
-	"variable_playback_ms",
-	"variable_playback_last_offset_pos",
-  "variable_playback_samples",
-	"variable_playback_terminators",
-	"variable_dtmf_type",
+  "variable_dtmf_type",
   "variable_myDigitBuffer",
-  "variable_myDigitBuffer_invalid"
+  "variable_myDigitBuffer_invalid",
+  "variable_playback_last_offset_pos",
+  "variable_playback_ms",
+  "variable_playback_samples",
+  "variable_playback_seconds",
+  "variable_playback_terminators"
 };
 static int limitedHeadersCount = sizeof(limitedHeaders) / sizeof(char *);
 static int compare_strings(const void *a, const void *b) {
@@ -1871,15 +1873,9 @@ SWITCH_DECLARE(switch_status_t) switch_event_serialize_json_obj(switch_event_t *
   int limitHeaders = 0;
   const char* eventName = event->headers ? event->headers->value : NULL;
 
-  if (!sorted) {
-    qsort(limitedEvents, limitedEventsCount, sizeof(char *), compare_strings);
-    qsort(limitedHeaders, limitedHeadersCount, sizeof(char *), compare_strings);
-    sorted = 1;
-  }
-
 	cj = cJSON_CreateObject();
 
-  /* DH: return minimal set of headers for CHANNEL_EXECUTE */
+  /* DH: return minimal set of headers for some common messages that jambonz uses */
   if (bsearch(&eventName, limitedEvents, limitedEventsCount, sizeof(char *), compare_strings) != NULL ||
     strstr(eventName, "_transcribe::") != NULL ||
     strstr(eventName, "::connect")) {
