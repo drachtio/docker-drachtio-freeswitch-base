@@ -14,9 +14,9 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     libxtables-dev libip6tc-dev libip4tc-dev  libiptc-dev libavformat-dev liblua5.1-0-dev libavfilter-dev libavcodec-dev libswresample-dev \
     libevent-dev libpcap-dev libxmlrpc-core-c3-dev markdown libjson-glib-dev lsb-release libpq-dev php-dev \
     libhiredis-dev gperf libspandsp-dev default-libmysqlclient-dev htop dnsutils gdb libtcmalloc-minimal4 \
-    gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev libboost-all-dev \
+    gnupg2 wget pkg-config ca-certificates libjpeg-dev libsqlite3-dev libpcre3-dev libldns-dev libboost-system-dev libboost-thread-dev \
     libspeex-dev libspeexdsp-dev libedit-dev libtiff-dev yasm libswscale-dev haveged libre2-dev \
-    libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev libgoogle-perftools-dev \
+    libopus-dev libsndfile-dev libshout3-dev libmpg123-dev libmp3lame-dev libopusfile-dev \
 		&& cd /usr/local/src \
     && which cmake && cmake --version \
     && apt-get remove --purge -y cmake \
@@ -98,22 +98,22 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/local/src/freeswitch/src \
     && cp /tmp/switch_event.c . \
     && cd /usr/local/src/libwebsockets \
-    && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
+    && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make -j 16 && make install \
     && cd /usr/local/src/freeswitch/libs/libfvad && cp /tmp/configure.ac.libfvad configure.ac \
-    && autoreconf -i && ./configure && make && make install \
+    && autoreconf -i && ./configure && make -j 16 && make install \
     && cd /usr/local/src/freeswitch/libs/spandsp \
-    && ./bootstrap.sh && ./configure && make && make install \
+    && ./bootstrap.sh && ./configure && make -j 16 && make install \
     && cd /usr/local/src/freeswitch/libs/sofia-sip \
-    && ./bootstrap.sh && ./configure && make && make install \
+    && ./bootstrap.sh && ./configure && make -j 16 && make install \
     && cd /usr/local/src/freeswitch/libs/aws-c-common \
     && mkdir -p build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-    && make && make install \
+    && make -j 16 && make install \
     && cd /usr/local/src/freeswitch/libs/aws-sdk-cpp \
     && git submodule update --init --recursive \
     && mkdir -p build && cd build \
     && cmake .. -DBUILD_ONLY="lexv2-runtime;transcribestreaming" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=ON -DCMAKE_CXX_FLAGS="-Wno-unused-parameter -Wno-error=nonnull -Wno-error=deprecated-declarations -Wno-error=uninitialized -Wno-error=maybe-uninitialized" \
-    && make && make install \
+    && make -j 16 && make install \
     && find /usr/local/src/freeswitch/libs/aws-sdk-cpp/ -type f -name "*.pc" | xargs cp -t /usr/local/lib/pkgconfig/ \
     && echo building grpc \
     && cd /usr/local/src/grpc \
@@ -121,24 +121,24 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && mkdir -p cmake/build \
     && cd cmake/build \
     && cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
-    && make \
+    && make -j 16 \
     && make install \
     && cd /usr/local/src/freeswitch/libs/googleapis \
-    && LANGUAGE=cpp FLAGS+='--experimental_allow_proto3_optional' make \
+    && LANGUAGE=cpp FLAGS+='--experimental_allow_proto3_optional' make -j 16 \
     && cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j 16 \
     && cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j 16 \
     && cd /usr/local/src/freeswitch/libs/soniox-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j 16 \
     && cd /usr/local/src/freeswitch/libs/cobalt-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j 16 \
     && sed -i '/#ifndef cJSON_AS4CPP__h/i #ifndef cJSON__h\n#define cJSON__h' /usr/local/include/aws/core/external/cjson/cJSON.h \
     && echo '#endif' >> /usr/local/include/aws/core/external/cjson/cJSON.h \
     && cd /usr/local/src/freeswitch \
     && ./bootstrap.sh -j \
     && ./configure --enable-tcmalloc=yes --with-lws=yes --with-extra=yes --with-aws=yes \
-    && make \
+    && make -j 16 \
     && make install \
     && cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
     && cp /tmp/event_socket.conf.xml /usr/local/freeswitch/conf/autoload_configs \
