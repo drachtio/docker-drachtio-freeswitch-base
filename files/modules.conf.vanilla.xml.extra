@@ -8,6 +8,7 @@
       <load module="mod_azure_tts"/>
       <load module="mod_cobalt_transcribe"/>
       <load module="mod_deepgram_transcribe"/>
+      <load module="mod_deepgram_tts"/>
       <load module="mod_dub"/>
       <load module="mod_elevenlabs_tts"/>
       <load module="mod_whisper_tts"/>

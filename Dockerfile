@@ -70,6 +70,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp -r /usr/local/src/freeswitch-modules/mod_aws_lex /usr/local/src/freeswitch/src/mod/applications/mod_aws_lex \
     && cp -r /usr/local/src/freeswitch-modules/mod_cobalt_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_cobalt_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_deepgram_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_deepgram_transcribe \
+    && cp -r /usr/local/src/freeswitch-modules/mod_deepgram_tts /usr/local/src/freeswitch/src/mod/applications/mod_deepgram_tts \
     && cp -r /usr/local/src/freeswitch-modules/mod_dub /usr/local/src/freeswitch/src/mod/applications/mod_dub \
     && cp -r /usr/local/src/freeswitch-modules/mod_google_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_google_transcribe \
     && cp -r /usr/local/src/freeswitch-modules/mod_ibm_transcribe /usr/local/src/freeswitch/src/mod/applications/mod_ibm_transcribe \

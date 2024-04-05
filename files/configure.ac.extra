@@ -2162,6 +2162,7 @@ AC_CONFIG_FILES([Makefile
     src/mod/applications/mod_cobalt_transcribe/Makefile
     src/mod/applications/mod_google_transcribe/Makefile
     src/mod/applications/mod_deepgram_transcribe/Makefile
+    src/mod/applications/mod_deepgram_tts/Makefile
     src/mod/applications/mod_dub/Makefile
     src/mod/applications/mod_elevenlabs_tts/Makefile
     src/mod/applications/mod_whisper_tts/Makefile
