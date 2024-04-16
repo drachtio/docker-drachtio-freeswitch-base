@@ -35,8 +35,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && ARCH=$(uname -m) && AZURE_ARCH=$(case "$ARCH" in x86_64) echo "x64" ;; arm64|aarch64) echo "arm64" ;; *) echo "Unsupported architecture: $ARCH" && exit 1 ;; esac) \
     && export LD_LIBRARY_PATH=/usr/local/lib:/usr/lib \
 		&& cd /tmp \
-		&& tar xvfz SpeechSDK-Linux-1.36.0.tar.gz \
-		&& cd SpeechSDK-Linux-1.36.0 \
+		&& tar xvfz SpeechSDK-Linux-1.37.0.tar.gz \
+		&& cd SpeechSDK-Linux-1.37.0 \
 		&& cp -r include /usr/local/include/MicrosoftSpeechSDK \
 		&& cp -r lib/ /usr/local/lib/MicrosoftSpeechSDK \
     && echo "copying azure speech sdk from usr/local/lib/MicrosoftSpeechSDK/${AZURE_ARCH}/libMicrosoft.*.so" \
@@ -88,12 +88,11 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp /tmp/modules.conf.in.extra /usr/local/src/freeswitch/build/modules.conf.in \
     && cp /tmp/modules.conf.vanilla.xml.extra /usr/local/src/freeswitch/conf/vanilla/autoload_configs/modules.conf.xml \
     && cp /tmp/avmd.conf.xml /usr/local/src/freeswitch/conf/vanilla/autoload_configs/avmd_conf.xml \
-    && cp /tmp/switch_rtp.c.patch /usr/local/src/freeswitch/src \
+    && cp /tmp/switch_rtp.c /usr/local/src/freeswitch/src \
     && cp /tmp/switch_core_media.c.patch /usr/local/src/freeswitch/src \
     && cp /tmp/mod_avmd.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
     && cp /tmp/mod_httapi.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
     && cd /usr/local/src/freeswitch/src \
-    && patch < switch_rtp.c.patch \
     && patch < switch_core_media.c.patch \
     && cd /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
     && patch < mod_avmd.c.patch \
