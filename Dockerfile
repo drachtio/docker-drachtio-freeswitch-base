@@ -73,6 +73,8 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cp /tmp/switch_core_media.c.patch /usr/local/src/freeswitch/src \
     && cp /tmp/mod_avmd.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_avmd \
     && cp /tmp/mod_httapi.c.patch /usr/local/src/freeswitch/src/mod/applications/mod_httapi \
+    && cp /tmp/switch_core.h /usr/local/src/freeswitch/src/include \
+    && cp /tmp/switch_core_session.c /usr/local/src/freeswitch/src \
     && cd /usr/local/src/freeswitch/src \
     && patch < switch_rtp.c.patch \
     && patch < switch_core_media.c.patch \
