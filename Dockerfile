@@ -34,7 +34,7 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
 		&& git config --global pull.rebase true \
 		&& git clone https://github.com/signalwire/freeswitch.git -b v1.10.10 \
 		&& git clone https://github.com/warmcat/libwebsockets.git -b v4.3.3 \
-		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.0.8 \
+		&& git clone https://github.com/jambonz/freeswitch-modules.git -b 1.0.8-debug-1 \
 		&& git clone https://github.com/grpc/grpc -b master && cd grpc && git checkout v1.57.0 && cd .. \
     && cd freeswitch/libs \
     && git clone https://github.com/drachtio/nuance-asr-grpc-api.git -b main \
