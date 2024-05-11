@@ -85,22 +85,22 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && cd /usr/local/src/freeswitch/src \
     && cp /tmp/switch_event.c . \
     && cd /usr/local/src/libwebsockets \
-    && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make && make install \
+    && mkdir -p build && cd build && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo && make  -j${BUILD_CPUS} && make install \
     && cd /usr/local/src/freeswitch/libs/libfvad \
-    && autoreconf -i && ./configure && make && make install \
+    && autoreconf -i && ./configure && make -j${BUILD_CPUS} && make install \
     && cd /usr/local/src/freeswitch/libs/spandsp \
-    && ./bootstrap.sh && ./configure && make && make install \
+    && ./bootstrap.sh && ./configure && make -j${BUILD_CPUS} && make install \
     && cd /usr/local/src/freeswitch/libs/sofia-sip \
-    && ./bootstrap.sh && ./configure && make && make install \
+    && ./bootstrap.sh && ./configure && make -j${BUILD_CPUS} && make install \
     && cd /usr/local/src/freeswitch/libs/aws-c-common \
     && mkdir -p build && cd build \
     && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-    && make && make install \
+    && make -j${BUILD_CPUS} && make install \
     && cd /usr/local/src/freeswitch/libs/aws-sdk-cpp \
     && git submodule update --init --recursive \
     && mkdir -p build && cd build \
     && cmake .. -DBUILD_ONLY="lexv2-runtime;transcribestreaming" -DCMAKE_BUILD_TYPE=RelWithDebInfo -DBUILD_SHARED_LIBS=OFF -DCMAKE_CXX_FLAGS="-Wno-unused-parameter" \
-    && make && make install \
+    && make -j${BUILD_CPUS} && make install \
     && find /usr/local/src/freeswitch/libs/aws-sdk-cpp/ -type f -name "*.pc" | xargs cp -t /usr/local/lib/pkgconfig/ \
     && echo building grpc \
     && cd /usr/local/src/grpc \
@@ -108,27 +108,27 @@ RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done \
     && mkdir -p cmake/build \
     && cd cmake/build \
     && cmake -DBUILD_SHARED_LIBS=ON -DgRPC_SSL_PROVIDER=package -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo ../.. \
-    && make \
+    && make -j${BUILD_CPUS} \
     && make install \
     && cd /usr/local/src/freeswitch/libs/googleapis \
     && echo "Ref: https://github.com/GoogleCloudPlatform/cpp-samples/issues/113" \
     && sed -i 's/\$fields/fields/' google/maps/routes/v1/route_service.proto \
     && sed -i 's/\$fields/fields/' google/maps/routes/v1alpha/route_service.proto \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j${BUILD_CPUS} \
     && cd /usr/local/src/freeswitch/libs/nuance-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j${BUILD_CPUS} \
     && cd /usr/local/src/freeswitch/libs/riva-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j${BUILD_CPUS} \
     && cd /usr/local/src/freeswitch/libs/soniox-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j${BUILD_CPUS} \
     && cd /usr/local/src/freeswitch/libs/cobalt-asr-grpc-api \
-    && LANGUAGE=cpp make \
+    && LANGUAGE=cpp make -j${BUILD_CPUS} \
     && sed -i '/#ifndef cJSON_AS4CPP__h/i #ifndef cJSON__h\n#define cJSON__h' /usr/local/include/aws/core/external/cjson/cJSON.h \
     && echo '#endif' >> /usr/local/include/aws/core/external/cjson/cJSON.h \
     && cd /usr/local/src/freeswitch \
     && ./bootstrap.sh -j \
     && ./configure --enable-tcmalloc=yes --with-lws=yes --with-extra=yes --with-aws=yes \
-    && make \
+    && make -j${BUILD_CPUS} \
     && make install \
     && make cd-sounds-install cd-moh-install \
     && cp /tmp/acl.conf.xml /usr/local/freeswitch/conf/autoload_configs \
